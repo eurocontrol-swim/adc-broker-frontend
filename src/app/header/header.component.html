@@ -1,0 +1,21 @@
+<div class="header">
+  <a href="https://www.eurocontrol.int/" target="_blank"><img class="logo_ECTRL"
+      src="static/assets/img/EUROCONTROL-logo-boxed-rgb.png"></a>
+  <span>
+    <h1>Aviation Data Corridor</h1>
+  </span>
+  <span class="spacer"></span>
+  <span class="username" *ngIf="user"><b>{{user.name}}</b><br>{{user.profile | titlecase}}</span>
+  <button mat-icon-button *ngIf="user">
+    <mat-icon>person</mat-icon>
+  </button>
+  <button mat-icon-button *ngIf="user">
+    <mat-icon>notifications</mat-icon>
+  </button>
+  <!-- <button mat-icon-button *ngIf="user">
+    <mat-icon>more_vert</mat-icon>
+  </button> -->
+  <button mat-icon-button *ngIf="user">
+    <mat-icon>logout</mat-icon>
+  </button>
+</div>

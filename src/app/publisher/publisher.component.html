@@ -1,0 +1,89 @@
+<h2>Publication management</h2>
+<div class="container">
+  <div class="row" style="margin-bottom: 20px;">
+    <div class="col-12">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Latest delivery policies</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="table_card">
+          <table mat-table [dataSource]="dataSource">
+
+            <!-- Policy ID Column -->
+            <ng-container matColumnDef="policyId">
+              <th mat-header-cell *matHeaderCellDef> Policy ID </th>
+              <td mat-cell *matCellDef="let element"> {{element.policyId}} </td>
+            </ng-container>
+
+            <!-- Policy date Column -->
+            <ng-container matColumnDef="policyDate">
+              <th mat-header-cell *matHeaderCellDef> Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.policyDate | date:'medium'}} </td>
+            </ng-container>
+
+            <!-- Policy type Column -->
+            <ng-container matColumnDef="policyType">
+              <th mat-header-cell *matHeaderCellDef> Policy type </th>
+              <td mat-cell *matCellDef="let element"> {{element.policyType}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <div *ngIf="!newPublication">
+    <button mat-raised-button color="primary" (click)="newPublication = !newPublication">
+      <mat-icon>add</mat-icon> Create new delivery policy
+    </button>
+  </div>
+  <div class="row" style="margin-top: 20px;" *ngIf="newPublication">
+    <div class="col-12">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>New publication policy</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="deliveryPolicyForm" (ngSubmit)="onPublish()">
+            <mat-form-field>
+              <mat-label>Policy Type</mat-label>
+              <mat-select formControlName="policy_type" required>
+                <mat-option *ngFor="let type of policy_types" [value]="type.value">{{type.viewValue}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <h2>Restriction list</h2>
+            <div class="row">
+            <div class="col-4">
+            <mat-form-field>
+              <mat-label>Organization list filtering</mat-label>
+              <mat-select formControlName="organization_list" required>
+                <mat-option *ngFor="let organization of organizations_name" [value]="organization.value">{{organization.viewValue}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field>
+                <mat-label>Organization type filtering</mat-label>
+                <mat-select formControlName="organization_type" required>
+                  <mat-option *ngFor="let organization_type of organizations_type" [value]="organization_type.value">{{organization_type.viewValue}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+
+            </div>
+            </div>
+          </form>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="onPublish()">Publish</button>
+          <button mat-button (click)="newPublication = !newPublication">Cancel</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>

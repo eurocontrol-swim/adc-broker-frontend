@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>{{dialog_user.action | titlecase}} user</h2>
+<mat-dialog-content>
+  <form [formGroup]="createUserform">
+    <mat-form-field>
+      <input matInput placeholder="Firstname" formControlName="firstname" required>
+      <mat-error>
+        Firstname required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Lastname" formControlName="lastname" required>
+      <mat-error>
+        Lastname required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Email" formControlName="email" required>
+      <mat-error>
+        Invalid email
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role" required>
+        <mat-option *ngFor="let roles of appComponent.userRoles" [value]="roles.value">{{roles.viewValue}}</mat-option>
+      </mat-select>
+      <mat-error>
+        Role required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Organization name" formControlName="organization_name" required>
+      <mat-error>
+        Organization name required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="organization_type" required>
+        <mat-option *ngFor="let organizations of appComponent.organizationTypes" [value]="organizations.value">{{organizations.viewValue}}</mat-option>
+      </mat-select>
+      <mat-error>
+        Organization type required
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color='primary' [mat-dialog-close]="true">{{dialog_user.action | titlecase}} user</button>
+</mat-dialog-actions>

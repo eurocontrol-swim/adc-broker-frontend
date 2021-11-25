@@ -1,0 +1,100 @@
+/* This file contains the global styles of website*/
+
+/* COLORS */
+/* PRIMARY : #003366 */
+/* SECONDARY : #00BCD4 */
+
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: #f7f7f7;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.mat-typography h1 {
+  margin: 20px 0;
+}
+
+.mat-typography h2,
+.mat-typography h3,
+.mat-typography h4 {
+  color: #003366;
+  margin: 16px 0 !important;
+}
+
+h2,
+.mat-typography h2 {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 1em 0;
+  color: #003366;
+}
+
+.mat-input-invalid .mat-input-placeholder {
+  color: red;
+}
+
+.mat-input-invalid .mat-input-ripple {
+  background-color: red;
+}
+
+/* HEADER */
+.head {
+  background-color: #fff;
+}
+
+.header {
+  display: flex;
+  box-sizing: border-box;
+  padding: 0;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  height: 130px;
+  background-color: #fff;
+}
+
+.logo_ECTRL {
+  height: 130px;
+  margin-right: 20px;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.username {
+  margin: 20px 20px 0 0;
+}
+
+/* LOGIN */
+.mat-form-field {
+  display: block !important;
+}
+
+/* PUBLISHER */
+.table_card {
+  height: 200px;
+  overflow: auto;
+}
+
+.table_card table {
+  width: 100%;
+}
+
+/* ADMINISTRATOR */
+.mat-column-edit_user,
+.mat-column-edit_data_element,
+.mat-column-delete_user,
+.mat-column-delete_data_element {
+  width: 40px;
+}

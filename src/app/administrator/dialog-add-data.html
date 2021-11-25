@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>{{dialog_data.action | titlecase}} data element</h2>
+<mat-dialog-content>
+  <form [formGroup]="createDataform">
+    <mat-form-field>
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="type" required>
+        <mat-option *ngFor="let types of dataTypes" [value]="types.value">{{types.viewValue}}</mat-option>
+      </mat-select>
+      <mat-error>
+        Type required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Path" formControlName="path" required>
+      <mat-error>
+        Path required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Schema" formControlName="schema" required>
+      <mat-error>
+        Schema required
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color='primary' [mat-dialog-close]="true">{{dialog_data.action | titlecase}} data element</button>
+</mat-dialog-actions>
