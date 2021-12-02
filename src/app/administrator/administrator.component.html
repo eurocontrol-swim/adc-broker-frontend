@@ -16,13 +16,13 @@
             <!-- Firstname Column -->
             <ng-container matColumnDef="firstname">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Firstname </th>
-              <td mat-cell *matCellDef="let element"> {{element.firstname | titlecase}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.first_name | titlecase}} </td>
             </ng-container>
 
             <!-- Lastname Column -->
             <ng-container matColumnDef="lastname">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Lastname </th>
-              <td mat-cell *matCellDef="let element"> {{element.lastname | titlecase}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.last_name | titlecase}} </td>
             </ng-container>
 
             <!-- Email Column -->
@@ -31,14 +31,26 @@
               <td mat-cell *matCellDef="let element"> {{element.email}} </td>
             </ng-container>
 
+            <!-- Password Column -->
+            <!-- <ng-container matColumnDef="password">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Password </th>
+              <td mat-cell *matCellDef="let element">
+                <mat-form-field>
+                  <input matInput readonly [type]="element.hidePassword ? 'password':'text'" [value]='element.password'>
+                  <mat-icon matSuffix (click)="element.hidePassword = !element.hidePassword">{{element.hidePassword ? 'visibility_off':'visibility'}}</mat-icon>
+                </mat-form-field>
+              </td>
+            </ng-container> -->
+
             <!-- Role Column -->
-            <ng-container matColumnDef="role" *ngFor="let roles of appComponent.userRoles">
+            <ng-container matColumnDef="role">
+              <!-- *ngFor="let roles of appComponent.userRoles" -->
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
-              <td mat-cell *matCellDef="let element"> {{element.role | titlecase}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.user_role | titlecase}} </td>
             </ng-container>
 
             <!-- Organization name Column -->
-            <ng-container matColumnDef="organization_name" >
+            <ng-container matColumnDef="organization_name">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Organization name </th>
               <td mat-cell *matCellDef="let element">{{element.organization_name | titlecase}}</td>
             </ng-container>
@@ -62,7 +74,7 @@
             <ng-container matColumnDef="delete_user">
               <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let element"> <button mat-icon-button matTooltip="Delete user"
-                  matTooltipPosition="right" color="primary" (click)="deleteUser(element.id)">
+                  matTooltipPosition="right" color="primary" (click)="deleteUser()">
                   <mat-icon>delete</mat-icon>
                 </button> </td>
             </ng-container>

@@ -98,3 +98,8 @@ h2,
 .mat-column-delete_data_element {
   width: 40px;
 }
+
+.mat-column-password .mat-form-field {
+  width: 120px;
+  margin-right: 20px;
+}

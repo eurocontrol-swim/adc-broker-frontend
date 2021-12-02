@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
@@ -11,6 +12,7 @@ import { CustomMaterialModule } from './custom-material.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from './login/login.component';
 import { AdministratorComponent, DialogAddData, DialogAddUser } from './administrator/administrator.component';
+import { AdministratorService } from './administrator/administrator.service';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,7 @@ import { AdministratorComponent, DialogAddData, DialogAddUser } from './administ
     AdministratorComponent,
     DialogAddUser,
     DialogAddData
-  ],
+    ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -30,9 +32,14 @@ import { AdministratorComponent, DialogAddData, DialogAddUser } from './administ
     AppRoutingModule,
     BrowserAnimationsModule,
     CustomMaterialModule,
-    NgbModule
+    NgbModule,
+    HttpClientModule,
+    HttpClientXsrfModule.withOptions({
+      cookieName: 'csrftoken',
+      headerName: 'X-CSRFToken',
+    }),
   ],
-  providers: [AppComponent,DialogAddUser, DialogAddData],
+  providers: [AppComponent,DialogAddUser, DialogAddData, AdministratorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
