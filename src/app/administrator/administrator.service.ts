@@ -50,4 +50,84 @@ export class AdministratorService {
       )
     )
   }
+  
+  deleteUser(
+    user_email:string
+  ):Observable<any>{
+    const headers = { 'content-type': 'application/json'}
+    return this.http.delete<any>(
+      'api/deleteUser',
+      {
+      headers:headers,
+      body: {'user_email':user_email},
+    }
+    )
+    .pipe(
+      catchError((err) => {
+        console.error(err);
+        throw err;
+      }
+      )
+    )
+  }
+
+  addDataCatalogue(
+    dataValues:Array<string>
+  ):Observable<any>{
+    const headers = { 'content-type': 'application/json'}
+    return this.http.post<any>(
+      'api/postDataCatalogue',
+      dataValues,
+      {
+      headers:headers,
+      responseType: 'json',
+      observe: 'response',
+    }
+    )
+    .pipe(
+      catchError((err) => {
+        console.error(err);
+        throw err;
+      }
+      )
+    )
+  }
+
+  getDataCatalogue():Observable<any>{
+    const headers = { 'content-type': 'application/json'}
+    return this.http.get<any>(
+      'api/getDataCatalogue',
+      {
+      headers:headers,
+      responseType: 'json',
+    }
+    )
+    .pipe(
+      catchError((err) => {
+        console.error(err);
+        throw err;
+      }
+      )
+    )
+  }
+
+  deleteDataElement(
+    data_id:number
+  ):Observable<any>{
+    const headers = { 'content-type': 'application/json'}
+    return this.http.delete<any>(
+      'api/deleteDataElement',
+      {
+      headers:headers,
+      body: {'data_id':data_id},
+    }
+    )
+    .pipe(
+      catchError((err) => {
+        console.error(err);
+        throw err;
+      }
+      )
+    )
+  }
 }

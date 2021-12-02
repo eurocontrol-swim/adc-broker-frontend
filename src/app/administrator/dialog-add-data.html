@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{dialog_data.action | titlecase}} data element</h2>
 <mat-dialog-content>
-  <form [formGroup]="createDataform">
+  <form [formGroup]="createDataform" (ngSubmit)="submitData()">
     <mat-form-field>
       <mat-label>Type</mat-label>
       <mat-select formControlName="type" required>
@@ -17,7 +17,7 @@
       </mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Schema" formControlName="schema" required>
+      <input matInput placeholder="Schema" formControlName="schema">
       <mat-error>
         Schema required
       </mat-error>
@@ -26,5 +26,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-raised-button color='primary' [mat-dialog-close]="true">{{dialog_data.action | titlecase}} data element</button>
+  <button mat-raised-button color='primary' [disabled]="createDataform.invalid" (click)="submitData()">{{dialog_data.action | titlecase}} data element</button>
 </mat-dialog-actions>
