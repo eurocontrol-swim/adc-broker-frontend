@@ -55,5 +55,5 @@
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
   <!-- [mat-dialog-close]="true" -->
-  <button mat-raised-button color='primary' (click)="submitUser()">{{dialog_user.action | titlecase}} user</button>
+  <button mat-raised-button color='primary' [disabled]="createUserform.invalid" (click)="submitUser()">{{dialog_user.action | titlecase}} user</button>
 </mat-dialog-actions>

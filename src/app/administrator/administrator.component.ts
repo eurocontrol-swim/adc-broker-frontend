@@ -18,9 +18,9 @@ export interface Users {
 }
 
 export interface DataCatalogue {
-  type:string;
-  schema:string;
-  path:string;
+  data_type:string;
+  data_schema:string;
+  data_path:string;
 }
 
 export interface DialogUser {
@@ -33,13 +33,6 @@ export interface DialogData {
   action:string;
 }
 
-
-const DATA_CATALOGUE:DataCatalogue[] = [
-  {type:'topic_element', schema:'', path:'all.topics'},
-  {type:'data_element', schema:'', path:'all.dataStructures'},
-  {type:'topic_element', schema:'', path:'all.topics.topics1'},
-]
-
 @Component({
   selector: 'app-administrator',
   templateUrl: './administrator.component.html',
@@ -50,15 +43,16 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
   @ViewChild('sortCatalogue') sortCatalogue: MatSort;
   USER_DATA:Users[] = [
     // {first_name:'Naomi', last_name:'Smart', email:'naomi.smart@gatwick.com', user_role:'publisher', organization_name:'gatwick', organization_type:'airport_operator'},
-    // {first_name:'Freddie', last_name:'Parker', email:'freddie.parker@easyjet.com', user_role:'subscriber', organization_name:'easyJet', organization_type:'airline'},
+  ]
+
+  DATA_CATALOGUE:DataCatalogue[] = [
+    // {data_type:'topic_element', data_schema:'', data_path:'all.topics'},
   ]
 
   usersDisplayedColumns: string[] = ['firstname', 'lastname','email', /* 'password',  */'role', 'organization_name', 'organization_type', 'edit_user', 'delete_user'];
   usersDataSource = new MatTableDataSource(this.USER_DATA);
   dataCatalogueDisplayedColumns: string[] = ['type', 'path','schema','edit_data_element', 'delete_data_element'];
-  dataCatalogueSource = new MatTableDataSource(DATA_CATALOGUE);
-
-  
+  dataCatalogueSource = new MatTableDataSource(this.DATA_CATALOGUE);
 
   constructor(
     public appComponent: AppComponent,
@@ -71,6 +65,7 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
       }
     
     this.getAllUsers();
+    this.getAllData();
   }
 
   ngOnInit():void{
@@ -93,6 +88,22 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
             });
             // Add users to users table
             this.usersDataSource = new MatTableDataSource(this.USER_DATA);
+          }
+        )
+  }
+  
+  getAllData():void{
+    // Get users from database
+    this.administratorService
+        .getDataCatalogue()
+        .subscribe(
+          (response) => {
+            this.DATA_CATALOGUE = []
+            response.data.forEach((data:DataCatalogue) => {
+              this.DATA_CATALOGUE.push(data)
+            });
+            // Add users to users table
+            this.dataCatalogueSource = new MatTableDataSource(this.DATA_CATALOGUE);
           }
         )
   }
@@ -125,14 +136,22 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
         data : {'data':element, 'action':action}
       });
 
-    // dialogAddData.afterClosed().subscribe(result => {
-    //   console.log(`Dialog result: ${result}`);
-    // });
+      dialogAddData.afterClosed().subscribe(result => {
+        // After closing dialog AddData, update the list of data catalogue
+        this.getAllData();
+      });
   }
 
-  deleteUser(){
-  //   console.log('deleteUser')
-  //   console.log(user_id)
+  deleteUser(user_email:string){
+    this.administratorService
+    .deleteUser(
+      user_email,
+      )
+    .subscribe(
+      (response) => {
+        this.getAllUsers(); 
+     }
+    )
   }
 
 }
@@ -182,7 +201,6 @@ export class DialogAddUser implements OnInit {
 
   submitUser():void{
     console.log(this.createUserform)
-    // if (this.createUserform.valid) {
       // Send values to service > to django > check Database > return userProfile
       this.administratorService
         .addUser(
@@ -194,7 +212,6 @@ export class DialogAddUser implements OnInit {
             this.dialogRef.close()
           }
         )
-    // }
   }
 }
 
@@ -207,6 +224,7 @@ export class DialogAddData implements OnInit {
   createDataform: FormGroup;
 
   constructor(
+    private administratorService: AdministratorService,
     public dialog: MatDialog,
     private _fb: FormBuilder,
     public dialogRef: MatDialogRef<DialogAddUser>,
@@ -227,10 +245,25 @@ export class DialogAddData implements OnInit {
   ngOnInit():void{
     if(this.dialog_data.data){
       this.createDataform.setValue({
-        type:this.dialog_data.data.type,
-        path:this.dialog_data.data.path,
-        schema:this.dialog_data.data.schema,
+        type:this.dialog_data.data.data_type,
+        path:this.dialog_data.data.data_path,
+        schema:this.dialog_data.data.data_schema,
       })
     }
+  }
+
+  submitData():void{
+    console.log(this.createDataform)
+      // Send values to service > to django > check Database > return data
+      this.administratorService
+        .addDataCatalogue(
+          this.createDataform.value,
+          )
+        .subscribe(
+          (response) => {
+            console.log(response)
+            this.dialogRef.close()
+          }
+        )
   }
 }
