@@ -3,14 +3,16 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { AppComponent, ListTypes } from '../app.component';
+import { AppComponent, ListTypes, User } from '../app.component';
+import { AdministratorService } from './administrator.service';
 
 export interface Users {
-  user_id: number;
-  firstname: string;
-  lastname:string;
+  first_name: string;
+  last_name:string;
   email:string;
-  role:string;
+  // password:string,
+  // hidePassword:boolean,
+  user_role:string;
   organization_name:string;
   organization_type:string;
 }
@@ -31,10 +33,6 @@ export interface DialogData {
   action:string;
 }
 
-const USER_DATA:Users[] = [
-  {user_id:2,firstname:'Naomi', lastname:'Smart', email:'naomi.smart@gatwick.com', role:'publisher', organization_name:'gatwick', organization_type:'airport_operator'},
-  {user_id:6,firstname:'Freddie', lastname:'Parker', email:'freddie.parker@easyjet.com', role:'subscriber', organization_name:'easyJet', organization_type:'airline'},
-]
 
 const DATA_CATALOGUE:DataCatalogue[] = [
   {type:'topic_element', schema:'', path:'all.topics'},
@@ -50,28 +48,53 @@ const DATA_CATALOGUE:DataCatalogue[] = [
 export class AdministratorComponent implements AfterViewInit, OnInit {
   @ViewChild('sortUser') sortUser: MatSort;
   @ViewChild('sortCatalogue') sortCatalogue: MatSort;
-  usersDisplayedColumns: string[] = ['firstname', 'lastname','email', 'role', 'organization_name', 'organization_type', 'edit_user', 'delete_user'];
-  usersDataSource = new MatTableDataSource(USER_DATA);
+  USER_DATA:Users[] = [
+    // {first_name:'Naomi', last_name:'Smart', email:'naomi.smart@gatwick.com', user_role:'publisher', organization_name:'gatwick', organization_type:'airport_operator'},
+    // {first_name:'Freddie', last_name:'Parker', email:'freddie.parker@easyjet.com', user_role:'subscriber', organization_name:'easyJet', organization_type:'airline'},
+  ]
+
+  usersDisplayedColumns: string[] = ['firstname', 'lastname','email', /* 'password',  */'role', 'organization_name', 'organization_type', 'edit_user', 'delete_user'];
+  usersDataSource = new MatTableDataSource(this.USER_DATA);
   dataCatalogueDisplayedColumns: string[] = ['type', 'path','schema','edit_data_element', 'delete_data_element'];
   dataCatalogueSource = new MatTableDataSource(DATA_CATALOGUE);
 
+  
+
   constructor(
     public appComponent: AppComponent,
+    public administratorService: AdministratorService,
     public dialog: MatDialog,
   ) { 
     if(!this.appComponent.user){
       //   this.router.navigate(['/']);
       this.appComponent.user = {id:45,name:'leo.grignon@thalesgroup.com', profile:'administrator'};
       }
+    
+    this.getAllUsers();
   }
 
   ngOnInit():void{
-
   }
 
   ngAfterViewInit(): void {
     this.usersDataSource.sort = this.sortUser;
     this.dataCatalogueSource.sort = this.sortCatalogue;
+  }
+
+  getAllUsers():void{
+    // Get users from database
+    this.administratorService
+        .getUsers()
+        .subscribe(
+          (response) => {
+            this.USER_DATA = []
+            response.users.forEach((user:Users) => {
+              this.USER_DATA.push(user)
+            });
+            // Add users to users table
+            this.usersDataSource = new MatTableDataSource(this.USER_DATA);
+          }
+        )
   }
 
   openDialogUser(user:Users, action:string) {
@@ -85,9 +108,10 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
         data : {'user':user, 'action':action}
       });
 
-    // dialogAddUser.afterClosed().subscribe(result => {
-    //   console.log(`Dialog result: ${result}`);
-    // });
+    dialogAddUser.afterClosed().subscribe(result => {
+      // After closing dialog AddUser, update the list of users
+      this.getAllUsers();
+    });
   }
 
   openDialogData(element:DataCatalogue, action:string) {
@@ -106,9 +130,9 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
     // });
   }
 
-  deleteUser(user_id:number){
-    console.log('deleteUser')
-    console.log(user_id)
+  deleteUser(){
+  //   console.log('deleteUser')
+  //   console.log(user_id)
   }
 
 }
@@ -123,6 +147,7 @@ export class DialogAddUser implements OnInit {
   createUserform: FormGroup;
 
   constructor(
+    private administratorService: AdministratorService,
     public appComponent: AppComponent,
     public dialog: MatDialog,
     private _fb: FormBuilder,
@@ -133,6 +158,7 @@ export class DialogAddUser implements OnInit {
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
       email: ['', Validators.email],
+      // password: ['', Validators.required],
       role: ['', Validators.required],
       organization_name: ['', Validators.required],
       organization_type: ['', Validators.required],
@@ -140,16 +166,35 @@ export class DialogAddUser implements OnInit {
    }
 
   ngOnInit():void{
+    // console.log(this.administratorService)
     if(this.dialog_user.user){
       this.createUserform.setValue({
-        firstname:this.dialog_user.user.firstname,
-        lastname:this.dialog_user.user.lastname,
+        firstname:this.dialog_user.user.first_name,
+        lastname:this.dialog_user.user.last_name,
         email:this.dialog_user.user.email,
-        role:this.dialog_user.user.role,
+        // password:this.dialog_user.user.password,
+        role:this.dialog_user.user.user_role,
         organization_name:this.dialog_user.user.organization_name,
         organization_type:this.dialog_user.user.organization_type,
       })
     }
+  }
+
+  submitUser():void{
+    console.log(this.createUserform)
+    // if (this.createUserform.valid) {
+      // Send values to service > to django > check Database > return userProfile
+      this.administratorService
+        .addUser(
+          this.createUserform.value,
+          )
+        .subscribe(
+          (response) => {
+            console.log(response)
+            this.dialogRef.close()
+          }
+        )
+    // }
   }
 }
 

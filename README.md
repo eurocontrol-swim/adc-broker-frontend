@@ -2,6 +2,13 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.0.2.
 
+## Install Angular
+For the first use of Angular, please install Angular CLI.
+Run `npm install -g @angular/cli`.
+
+## Install librairies / packages
+Run `npm install` to install all useful packages.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
@@ -12,7 +19,8 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `ng build  --outputHashing=none` to build the project without hashing filename. The build artifacts will be stored in the `dist/` directory.
+Add `--watch` to build when files change during development.
 
 ## Running unit tests
 
