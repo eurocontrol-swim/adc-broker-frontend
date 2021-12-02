@@ -110,4 +110,24 @@ export class AdministratorService {
       )
     )
   }
+
+  deleteDataElement(
+    data_id:number
+  ):Observable<any>{
+    const headers = { 'content-type': 'application/json'}
+    return this.http.delete<any>(
+      'api/deleteDataElement',
+      {
+      headers:headers,
+      body: {'data_id':data_id},
+    }
+    )
+    .pipe(
+      catchError((err) => {
+        console.error(err);
+        throw err;
+      }
+      )
+    )
+  }
 }

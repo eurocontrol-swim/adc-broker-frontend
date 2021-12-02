@@ -42,10 +42,12 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
   @ViewChild('sortUser') sortUser: MatSort;
   @ViewChild('sortCatalogue') sortCatalogue: MatSort;
   USER_DATA:Users[] = [
+    // EXAMPLE
     // {first_name:'Naomi', last_name:'Smart', email:'naomi.smart@gatwick.com', user_role:'publisher', organization_name:'gatwick', organization_type:'airport_operator'},
   ]
 
   DATA_CATALOGUE:DataCatalogue[] = [
+    // EXAMPLE
     // {data_type:'topic_element', data_schema:'', data_path:'all.topics'},
   ]
 
@@ -93,7 +95,7 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
   }
   
   getAllData():void{
-    // Get users from database
+    // Get data catalogue elements from database
     this.administratorService
         .getDataCatalogue()
         .subscribe(
@@ -102,7 +104,7 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
             response.data.forEach((data:DataCatalogue) => {
               this.DATA_CATALOGUE.push(data)
             });
-            // Add users to users table
+            // Add data to data catalogue table
             this.dataCatalogueSource = new MatTableDataSource(this.DATA_CATALOGUE);
           }
         )
@@ -153,6 +155,18 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
      }
     )
   }
+  
+  deleteDataElement(data_id:number){
+    this.administratorService
+    .deleteDataElement(
+      data_id,
+      )
+    .subscribe(
+      (response) => {
+        this.getAllData(); 
+     }
+    )
+  }
 
 }
 
@@ -161,8 +175,6 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
   templateUrl: 'dialog-add-user.html',
 })
 export class DialogAddUser implements OnInit {
-  // userRoles:ListTypes[];
-  // organizationTypes:ListTypes[];
   createUserform: FormGroup;
 
   constructor(
@@ -185,7 +197,6 @@ export class DialogAddUser implements OnInit {
    }
 
   ngOnInit():void{
-    // console.log(this.administratorService)
     if(this.dialog_user.user){
       this.createUserform.setValue({
         firstname:this.dialog_user.user.first_name,
@@ -200,8 +211,6 @@ export class DialogAddUser implements OnInit {
   }
 
   submitUser():void{
-    console.log(this.createUserform)
-      // Send values to service > to django > check Database > return userProfile
       this.administratorService
         .addUser(
           this.createUserform.value,
@@ -238,7 +247,7 @@ export class DialogAddData implements OnInit {
     this.createDataform = this._fb.group({
       type: ['', Validators.required],
       path: ['', Validators.required],
-      schema: ['', Validators.required],
+      schema: [''],
     })
    }
 
@@ -253,8 +262,6 @@ export class DialogAddData implements OnInit {
   }
 
   submitData():void{
-    console.log(this.createDataform)
-      // Send values to service > to django > check Database > return data
       this.administratorService
         .addDataCatalogue(
           this.createDataform.value,

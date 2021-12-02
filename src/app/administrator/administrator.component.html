@@ -12,7 +12,7 @@
           </button>
         </div>
         <mat-card-content class="table_card">
-          <table mat-table #sortUser="matSort" [dataSource]="usersDataSource" matSort>
+          <table *ngIf="usersDataSource.data.length > 0; else noUser" mat-table #sortUser="matSort" [dataSource]="usersDataSource" matSort>
             <!-- Firstname Column -->
             <ng-container matColumnDef="firstname">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Firstname </th>
@@ -82,6 +82,9 @@
             <tr mat-header-row *matHeaderRowDef="usersDisplayedColumns;sticky: true"></tr>
             <tr mat-row *matRowDef="let row; columns: usersDisplayedColumns;"></tr>
           </table>
+          <ng-template #noUser>
+            <p class="empty_table_msg">No users created, please create a new user</p>
+          </ng-template>
         </mat-card-content>
       </mat-card>
     </div>
@@ -98,7 +101,8 @@
           </button>
         </div>
         <mat-card-content class="table_card">
-          <table mat-table #sortCatalogue="matSort" [dataSource]="dataCatalogueSource" matSort>
+          <table *ngIf="dataCatalogueSource.data.length > 0; else noData" mat-table #sortCatalogue="matSort"
+            [dataSource]="dataCatalogueSource" matSort>
             <!-- Type Column -->
             <ng-container matColumnDef="type">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
@@ -131,7 +135,8 @@
             <ng-container matColumnDef="delete_data_element">
               <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let element">
-                <button mat-icon-button matTooltip="Delete data element" matTooltipPosition="right" color="primary">
+                <button mat-icon-button matTooltip="Delete data element" matTooltipPosition="right" color="primary"
+                  (click)="deleteDataElement(element.id)">
                   <mat-icon>delete</mat-icon>
                 </button> </td>
             </ng-container>
@@ -139,6 +144,9 @@
             <tr mat-header-row *matHeaderRowDef="dataCatalogueDisplayedColumns;sticky: true"></tr>
             <tr mat-row *matRowDef="let row; columns: dataCatalogueDisplayedColumns;"></tr>
           </table>
+          <ng-template #noData>
+            <p class="empty_table_msg">No data available, please create a new data</p>
+          </ng-template>
         </mat-card-content>
       </mat-card>
     </div>
