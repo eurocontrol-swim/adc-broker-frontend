@@ -18,6 +18,7 @@ export interface Users {
 }
 
 export interface DataCatalogue {
+  id:number,
   data_type:string;
   data_schema:string;
   data_path:string;
@@ -63,7 +64,7 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
   ) { 
     if(!this.appComponent.user){
       //   this.router.navigate(['/']);
-      this.appComponent.user = {id:45,name:'leo.grignon@thalesgroup.com', profile:'administrator'};
+      this.appComponent.user = {id:1,email:'leo.grignon@thalesgroup.com', profile:'administrator'};
       }
     
     this.getAllUsers();
@@ -97,7 +98,7 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
   getAllData():void{
     // Get data catalogue elements from database
     this.administratorService
-        .getDataCatalogue()
+        .getDataCatalogue(null)
         .subscribe(
           (response) => {
             this.DATA_CATALOGUE = []

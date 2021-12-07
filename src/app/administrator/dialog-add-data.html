@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{dialog_data.action | titlecase}} data element</h2>
 <mat-dialog-content>
-  <form [formGroup]="createDataform" (ngSubmit)="submitData()">
+  <form [formGroup]="createDataform">
     <mat-form-field>
       <mat-label>Type</mat-label>
       <mat-select formControlName="type" required>

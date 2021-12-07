@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{dialog_user.action | titlecase}} user</h2>
 <mat-dialog-content>
-  <form [formGroup]="createUserform" (ngSubmit)="submitUser()">
+  <form [formGroup]="createUserform">
     <mat-form-field>
       <input matInput placeholder="Firstname" formControlName="firstname" required>
       <mat-error>
@@ -41,7 +41,7 @@
       </mat-error>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Role</mat-label>
+      <mat-label>Organization type</mat-label>
       <mat-select formControlName="organization_type" required>
         <mat-option *ngFor="let organizations of appComponent.organizationTypes" [value]="organizations.value">
           {{organizations.viewValue}}</mat-option>

@@ -34,7 +34,7 @@ h2,
 .mat-typography h2 {
   font-size: 30px;
   font-weight: bold;
-  margin: 1em 0;
+  margin: 0.75em 0;
   color: #003366;
 }
 
@@ -44,6 +44,14 @@ h2,
 
 .mat-input-invalid .mat-input-ripple {
   background-color: red;
+}
+
+.mat-card-header-text {
+  margin: 0 !important;
+}
+
+.mat-card-actions {
+  text-align: right;
 }
 
 /* HEADER */
@@ -83,7 +91,7 @@ h2,
 
 /* PUBLISHER */
 .table_card {
-  max-height: 200px;
+  max-height: 250px;
   overflow: auto;
 }
 
@@ -91,9 +99,80 @@ h2,
   width: 100%;
 }
 
+/* PUBLISHER - drop list */
+
+.tr {
+  max-height: 200px;
+  overflow: auto;
+}
+
+tr.detail-row {
+  height: 0 !important;
+}
+
+tr.expand-row:not(.expanded-row):hover {
+  background: whitesmoke;
+  cursor: pointer;
+}
+
+tr.expand-row:not(.expanded-row):active {
+  background: #efefef;
+}
+
+.expand-detail {
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.expand-row td {
+  border-bottom-width: 0;
+}
+
+.expand-row .mat-cell {
+  border: none;
+}
+
+.transformations-panel {
+  margin: 0 20px;
+}
+
+.transformations-table {
+  cursor: grab;
+}
+
+.transformations {
+  padding: 15px 15px 5px 15px;
+  border: solid #3b3b3b 1px;
+  margin: 5px;
+  width: 100%;
+  line-height: 5px;
+}
+
+#catalogue_id-panel .mat-option {
+  height: 7em;
+  line-height: 20px;
+}
+
+/* Animate items as they're being sorted. */
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  background-color: #fff;
+  padding: 4px;
+}
+
 /* ADMINISTRATOR */
 .mat-column-edit_user,
 .mat-column-edit_data_element,
+.mat-column-edit_policy,
+.mat-column-edit_policy,
 .mat-column-delete_user,
 .mat-column-delete_data_element {
   width: 40px;

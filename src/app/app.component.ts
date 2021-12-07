@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 export interface User {
   id:number,
-  name:string,
+  email:string,
   profile:string
 }
 
@@ -20,7 +20,7 @@ export class AppComponent {
   user:User;
 
   userRoles:ListTypes[] = [
-    {value:'admin', viewValue:'Administrator'},
+    {value:'administrator', viewValue:'Administrator'},
     {value:'publisher', viewValue:'Publisher'},
     {value:'subscriber', viewValue:'Subscriber'},
   ]
