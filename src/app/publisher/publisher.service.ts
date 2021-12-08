@@ -52,25 +52,26 @@ export class PublisherService {
   }
 
   getOrganizationsName(
-    ): Observable<any> {
-      const headers = { 'content-type': 'application/json' }
-      return this.http.get<any>(
-        'api/getOrganizationsName',
-        {
-          headers: headers,
-          responseType: 'json',
+  ): Observable<any> {
+    const headers = { 'content-type': 'application/json' }
+    return this.http.get<any>(
+      'api/getOrganizationsName',
+      {
+        headers: headers,
+        responseType: 'json',
+      }
+    )
+      .pipe(
+        catchError((err) => {
+          console.error(err);
+          throw err;
         }
-      )
-        .pipe(
-          catchError((err) => {
-            console.error(err);
-            throw err;
-          }
-          )
         )
-    }
+      )
+  }
 
   postPublisherPolicy(
+    policy_id: string,
     policy_type: string,
     catalogue_id: number,
     transformations: Transformation[],
@@ -80,6 +81,7 @@ export class PublisherService {
     return this.http.post<any>(
       'api/postPublisherPolicy',
       {
+        'policy_id': policy_id,
         'policy_type': policy_type,
         'catalogue_id': catalogue_id,
         'transformations': transformations,
@@ -99,4 +101,27 @@ export class PublisherService {
         )
       )
   }
+
+  deletePublisherPolicy(
+    policy_id: number,
+    user_email: string
+  ): Observable<any> {
+    const headers = { 'content-type': 'application/json' }
+    return this.http.delete<any>(
+      'api/deletePublisherPolicy',
+      {
+        headers: headers,
+        body: { 'user_email': user_email, 'policy_id': policy_id },
+      }
+    )
+      .pipe(
+        catchError((err) => {
+          console.error(err);
+          throw err;
+        }
+        )
+      )
+  }
+
+
 }

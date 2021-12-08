@@ -12,6 +12,7 @@ export interface DeliveryPolicy {
   id: number;
   created_at: Date;
   policy_type: string;
+  catalogue: DataCatalogue;
   transformations: Transformation;
 }
 
@@ -51,6 +52,8 @@ export class PublisherComponent implements OnInit {
   operators: ListTypes[];
   types: ListTypes[];
 
+  create_or_update:boolean = true;
+
   transformationList: Transformation[] = [
     // {item_operator: 'endpoint_restriction', item_type:'organization_name' , json_path:'json'}
   ];
@@ -65,6 +68,7 @@ export class PublisherComponent implements OnInit {
     private _fb: FormBuilder,
   ) {
     this.deliveryPolicyForm = this._fb.group({
+      policy_id: [null, Validators.required],
       policy_type: ['', Validators.required],
       catalogue_id: ['', Validators.required],
       transformations: _fb.group({
@@ -85,6 +89,7 @@ export class PublisherComponent implements OnInit {
       { value: 'endpoint_restriction', viewValue: 'Endpoint restriction' },
       { value: 'payload_extraction', viewValue: 'Payload extraction' },
     ]
+
     this.types = [
       { value: 'organization_type', viewValue: 'Organization type' },
       { value: 'organization_name', viewValue: 'Organization name' },
@@ -115,6 +120,7 @@ export class PublisherComponent implements OnInit {
               'id': p.policy.id,
               'created_at': new Date(p.policy.created_at),
               'policy_type': p.policy.policy_type,
+              'catalogue': p.catalogue,
               'transformations': p.transformations,
             }
             )
@@ -142,7 +148,33 @@ export class PublisherComponent implements OnInit {
   }
 
   deletePolicy(policy_id: number) {
+    this.publisherService
+      .deletePublisherPolicy(
+        policy_id,
+        this.appComponent.user.email,
+      )
+      .subscribe(
+        (response) => {
+          this.getAllPolicies();
+        }
+      )
+  }
 
+  editPolicy(policy: any) {
+    this.create_or_update = false;
+    this.newPublication = true;
+    console.log(policy)
+    this.getAllData(policy.policy_type);
+    this.deliveryPolicyForm.patchValue({
+      policy_id: policy.id,
+      policy_type: policy.policy_type,
+      catalogue_id: policy.catalogue[0].id,
+    });
+
+    this.transformationList = [];
+    policy.transformations.forEach((transformation: Transformation) => {
+      this.transformationList.push(transformation)
+    });
   }
 
   resetTransformations(): void {
@@ -188,6 +220,7 @@ export class PublisherComponent implements OnInit {
     if (this.deliveryPolicyForm.get('policy_type').valid && this.transformationList.length > 0) {
       this.publisherService
         .postPublisherPolicy(
+          this.deliveryPolicyForm.get('policy_id').value,
           this.deliveryPolicyForm.get('policy_type').value,
           this.deliveryPolicyForm.get('catalogue_id').value,
           this.transformationList,
@@ -197,6 +230,8 @@ export class PublisherComponent implements OnInit {
           (response) => {
             // Clear deliveryPolicyForm
             this.deliveryPolicyForm.reset();
+            this.transformationList = [];
+            this.resetTransformations();
             // Close panel
             this.newPublication = false
             // Refresh policies

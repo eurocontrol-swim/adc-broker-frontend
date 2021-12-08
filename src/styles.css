@@ -131,6 +131,7 @@ tr.expand-row:not(.expanded-row):active {
 
 .expand-row .mat-cell {
   border: none;
+  cursor: pointer;
 }
 
 .transformations-panel {
