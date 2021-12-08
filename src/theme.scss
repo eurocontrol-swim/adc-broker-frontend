@@ -95,8 +95,8 @@ $adc-turquoise: (50: #00BCD4,
 /* ======== Angular material custom themes ======== */
 $adc-primary: mat-palette($adc-blue);
 $adc-accent: mat-palette($adc-turquoise, 100, 500, A100);
-$adc-warn: mat-palette($adc-red);
+$adc-warn: mat-palette($adc-red, 500);
 
-$adc-theme: mat-light-theme($adc-primary, $adc-accent, $adc-red);
+$adc-theme: mat-light-theme($adc-primary, $adc-accent, $adc-warn);
 
 @include angular-material-theme($adc-theme);

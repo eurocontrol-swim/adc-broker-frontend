@@ -7,6 +7,7 @@ import { DataCatalogue } from '../administrator/administrator.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AdministratorService } from '../administrator/administrator.service';
+import { ConfirmationDialogService } from '../confirmation-dialog/confirmation-dialog.service';
 
 export interface DeliveryPolicy {
   id: number;
@@ -52,7 +53,7 @@ export class PublisherComponent implements OnInit {
   operators: ListTypes[];
   types: ListTypes[];
 
-  create_or_update:boolean = true;
+  create_or_update: boolean = true;
 
   transformationList: Transformation[] = [
     // {item_operator: 'endpoint_restriction', item_type:'organization_name' , json_path:'json'}
@@ -64,6 +65,7 @@ export class PublisherComponent implements OnInit {
     public appComponent: AppComponent,
     public publisherService: PublisherService,
     public administratorService: AdministratorService,
+    private confirmationDialogService: ConfirmationDialogService,
     private router: Router,
     private _fb: FormBuilder,
   ) {
@@ -148,16 +150,22 @@ export class PublisherComponent implements OnInit {
   }
 
   deletePolicy(policy_id: number) {
-    this.publisherService
-      .deletePublisherPolicy(
-        policy_id,
-        this.appComponent.user.email,
-      )
-      .subscribe(
-        (response) => {
-          this.getAllPolicies();
+    this.confirmationDialogService.confirm('Delete publisher policy', 'Please confirm the deletion of this policy.', 'Delete the policy', 'Cancel')
+      .then((confirmed: boolean) => {
+        if (confirmed) {
+          this.publisherService
+            .deletePublisherPolicy(
+              policy_id,
+              this.appComponent.user.email,
+            )
+            .subscribe(
+              (response) => {
+                this.getAllPolicies();
+              }
+            )
         }
-      )
+      })
+      .catch(() => console.log('User dismissed the confirmed dialog'));
   }
 
   editPolicy(policy: any) {
@@ -251,7 +259,13 @@ export class PublisherComponent implements OnInit {
   }
 
   deleteTransformationElement(index: number): void {
-    this.transformationList.splice(index, 1);
+    this.confirmationDialogService.confirm('Delete transformation element', 'Please confirm the deletion of this transformation element.', 'Delete the transformation element', 'Cancel')
+      .then((confirmed: boolean) => {
+        if (confirmed) {
+          this.transformationList.splice(index, 1);
+        }
+      })
+      .catch(() => console.log('User dismissed the confirmed dialog'));   
   }
 
   drop(event: CdkDragDrop<string[]>) {

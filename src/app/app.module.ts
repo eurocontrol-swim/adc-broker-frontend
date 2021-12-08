@@ -13,6 +13,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from './login/login.component';
 import { AdministratorComponent, DialogAddData, DialogAddUser } from './administrator/administrator.component';
 import { AdministratorService } from './administrator/administrator.service';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogService } from './confirmation-dialog/confirmation-dialog.service';
 
 @NgModule({
   declarations: [
@@ -23,8 +25,9 @@ import { AdministratorService } from './administrator/administrator.service';
     LoginComponent,
     AdministratorComponent,
     DialogAddUser,
-    DialogAddData
-    ],
+    DialogAddData,
+    ConfirmationDialogComponent
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -39,7 +42,7 @@ import { AdministratorService } from './administrator/administrator.service';
       headerName: 'X-CSRFToken',
     }),
   ],
-  providers: [AppComponent,DialogAddUser, DialogAddData, AdministratorService],
+  providers: [AppComponent, DialogAddUser, DialogAddData, AdministratorService, ConfirmationDialogService, ConfirmationDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
