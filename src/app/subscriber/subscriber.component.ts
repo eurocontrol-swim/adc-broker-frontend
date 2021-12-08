@@ -13,7 +13,7 @@ export class SubscriberComponent implements OnInit {
   ) { 
     if(!this.appComponent.user){
       //   this.router.navigate(['/']);
-      this.appComponent.user = {id:45,name:'leo.grignon@thalesgroup.com', profile:'administrator'};
+      this.appComponent.user = {id:1,email:'leo.grignon@thalesgroup.com', profile:'administrator'};
       }
   }
 

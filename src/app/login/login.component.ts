@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {AppComponent} from '../app.component'
+import { AppComponent } from '../app.component'
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,7 +15,7 @@ export class LoginComponent {
     private _fb: FormBuilder,
     private appComponent: AppComponent,
     private router: Router,
-  ) { 
+  ) {
     this.loginForm = this._fb.group({
       username: ['', Validators.email],
       password: ['', Validators.required],
@@ -33,10 +33,10 @@ export class LoginComponent {
       //   .then(() => {
       //     this.authSuccessful = true;
 
-      this.appComponent.user = {id:45,name:username, profile:'administrator'};
+      this.appComponent.user = { id: 1, email: 'leo.grignon@thalesgroup.com', profile: 'administrator' };
 
-      this.router.navigate(['/'+this.appComponent.user.profile+'']);
-          
+      this.router.navigate(['/' + this.appComponent.user.profile + '']);
+
       //   })
       //   .catch(() => {
       //     this.authInvalid = true;

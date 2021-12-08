@@ -93,10 +93,16 @@ export class AdministratorService {
     )
   }
 
-  getDataCatalogue():Observable<any>{
+  getDataCatalogue(
+    policy_type:string
+  ):Observable<any>{
     const headers = { 'content-type': 'application/json'}
+    let URL = ''
+    if(policy_type != null){
+      URL = '?policy_type='+policy_type
+    }
     return this.http.get<any>(
-      'api/getDataCatalogue',
+      'api/getDataCatalogue'+URL,
       {
       headers:headers,
       responseType: 'json',
