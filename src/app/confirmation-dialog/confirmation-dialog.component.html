@@ -1,0 +1,8 @@
+<h2>{{ title }}</h2>
+<mat-dialog-content>
+  {{ message }}
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="decline()">{{ btnCancelText }}</button>
+  <button mat-raised-button color='warn' (click)="accept()">{{ btnOkText }}</button>
+</mat-dialog-actions>
