@@ -6,18 +6,18 @@ import { Transformation } from '../app.component'
 @Injectable({
   providedIn: 'root'
 })
-export class PublisherService {
+export class SubscriberService {
 
   constructor(
     private http: HttpClient,
   ) { }
 
-  getPublisherPolicy(
+  getSubscriberPolicy(
     user_mail: string
   ): Observable<any> {
     const headers = { 'content-type': 'application/json' }
     return this.http.get<any>(
-      'api/getPublisherPolicy?user_mail=' + user_mail,
+      'api/getSubscriberPolicy?user_mail=' + user_mail,
       {
         headers: headers,
         responseType: 'json',
@@ -32,45 +32,7 @@ export class PublisherService {
       )
   }
 
-  getOrganizationsType(
-  ): Observable<any> {
-    const headers = { 'content-type': 'application/json' }
-    return this.http.get<any>(
-      'api/getOrganizationsType',
-      {
-        headers: headers,
-        responseType: 'json',
-      }
-    )
-      .pipe(
-        catchError((err) => {
-          console.error(err);
-          throw err;
-        }
-        )
-      )
-  }
-
-  getOrganizationsName(
-  ): Observable<any> {
-    const headers = { 'content-type': 'application/json' }
-    return this.http.get<any>(
-      'api/getOrganizationsName',
-      {
-        headers: headers,
-        responseType: 'json',
-      }
-    )
-      .pipe(
-        catchError((err) => {
-          console.error(err);
-          throw err;
-        }
-        )
-      )
-  }
-
-  postPublisherPolicy(
+  postSubscriberPolicy(
     policy_id: string,
     policy_type: string,
     catalogue_id: number,
@@ -79,7 +41,7 @@ export class PublisherService {
   ): Observable<any> {
     const headers = { 'content-type': 'application/json' }
     return this.http.post<any>(
-      'api/postPublisherPolicy',
+      'api/postSubscriberPolicy',
       {
         'policy_id': policy_id,
         'policy_type': policy_type,
@@ -102,13 +64,13 @@ export class PublisherService {
       )
   }
 
-  deletePublisherPolicy(
+  deleteSubscriberPolicy(
     policy_id: number,
     user_email: string
   ): Observable<any> {
     const headers = { 'content-type': 'application/json' }
     return this.http.delete<any>(
-      'api/deletePublisherPolicy',
+      'api/deleteSubscriberPolicy',
       {
         headers: headers,
         body: { 'user_email': user_email, 'policy_id': policy_id },
@@ -122,6 +84,4 @@ export class PublisherService {
         )
       )
   }
-
-
 }

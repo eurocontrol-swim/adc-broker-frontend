@@ -15,6 +15,9 @@ import { AdministratorComponent, DialogAddData, DialogAddUser } from './administ
 import { AdministratorService } from './administrator/administrator.service';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { ConfirmationDialogService } from './confirmation-dialog/confirmation-dialog.service';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { AdcLabelPipe } from './app-label.pipe';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,8 @@ import { ConfirmationDialogService } from './confirmation-dialog/confirmation-di
     AdministratorComponent,
     DialogAddUser,
     DialogAddData,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    AdcLabelPipe,
   ],
   imports: [
     BrowserModule,
@@ -34,6 +38,8 @@ import { ConfirmationDialogService } from './confirmation-dialog/confirmation-di
     ReactiveFormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatSortModule,
+    MatTableModule,
     CustomMaterialModule,
     NgbModule,
     HttpClientModule,
@@ -42,6 +48,7 @@ import { ConfirmationDialogService } from './confirmation-dialog/confirmation-di
       headerName: 'X-CSRFToken',
     }),
   ],
+  exports: [AdcLabelPipe],
   providers: [AppComponent, DialogAddUser, DialogAddData, AdministratorService, ConfirmationDialogService, ConfirmationDialogComponent],
   bootstrap: [AppComponent]
 })

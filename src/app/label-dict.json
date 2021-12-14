@@ -1,0 +1,19 @@
+{
+    "broker_admin": "Broker administration",
+    "topic_based": "Topic based",
+    "topic_element": "TOPIC",
+    "data_based": "Data based",
+    "data_structure_based": "Data structure based",
+    "data_element": "DATA",
+    "airport_operator": "Airport operator",
+    "meteorological_service_provider": "Meteorological service provider",
+    "airline": "Airline",
+    "airspace_user": "Airspace user",
+    "ground_handler": "Ground handler",
+    "network_manager": "Network manager",
+    "air_navigation_service_provider": "Air navigation service provider",
+    "payload_extraction":"Payload extraction",
+    "endpoint_restriction":"Endpoint restriction",
+    "organization_type":"Organization type",
+    "organization_name":"Organization name"
+}
