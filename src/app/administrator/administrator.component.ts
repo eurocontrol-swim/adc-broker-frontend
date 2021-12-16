@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AppComponent, ListTypes, User } from '../app.component';
 import { ConfirmationDialogService } from '../confirmation-dialog/confirmation-dialog.service';
 import { AdministratorService } from './administrator.service';
+import { AdcLabelPipe } from '../app-label.pipe';
 
 export interface Users {
   first_name: string;
@@ -53,16 +54,17 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
     // {data_type:'topic_element', data_schema:'', data_path:'all.topics'},
   ]
 
-  usersDisplayedColumns: string[] = ['firstname', 'lastname', 'email', /* 'password',  */'role', 'organization_name', 'organization_type', 'edit_user', 'delete_user'];
-  usersDataSource = new MatTableDataSource(this.USER_DATA);
-  dataCatalogueDisplayedColumns: string[] = ['type', 'path', 'schema', 'edit_data_element', 'delete_data_element'];
-  dataCatalogueSource = new MatTableDataSource(this.DATA_CATALOGUE);
+  usersDisplayedColumns: string[] = ['first_name', 'last_name', 'email', /* 'password',  */'user_role', 'organization_name', 'organization_type', 'edit_user', 'delete_user'];
+  usersDataSource: MatTableDataSource<Users>;
+  dataCatalogueDisplayedColumns: string[] = ['data_type', 'data_path', 'data_schema', 'edit_data_element', 'delete_data_element'];
+  dataCatalogueSource: MatTableDataSource<DataCatalogue>;
 
   constructor(
     public appComponent: AppComponent,
     public administratorService: AdministratorService,
     private confirmationDialogService: ConfirmationDialogService,
     public dialog: MatDialog,
+    private adcLabel: AdcLabelPipe,
   ) {
     if (!this.appComponent.user) {
       //   this.router.navigate(['/']);
@@ -255,8 +257,8 @@ export class DialogAddData implements OnInit {
     @Inject(MAT_DIALOG_DATA) public dialog_data: DialogData,
   ) {
     this.dataTypes = [
-      { value: 'topic_element', viewValue: 'Topic element' },
-      { value: 'data_element', viewValue: 'Data element' }
+      { value: 'topic_element', viewValue: 'TOPIC' },
+      { value: 'data_element', viewValue: 'DATA' }
     ]
 
     this.createDataform = this._fb.group({

@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AppComponent, ListTypes } from '../app.component'
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AppComponent, ListTypes, Transformation } from '../app.component'
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PublisherService } from './publisher.service';
@@ -8,6 +8,10 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AdministratorService } from '../administrator/administrator.service';
 import { ConfirmationDialogService } from '../confirmation-dialog/confirmation-dialog.service';
+import { AppService } from '../app.service';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { AdcLabelPipe } from '../app-label.pipe';
 
 export interface DeliveryPolicy {
   id: number;
@@ -15,14 +19,6 @@ export interface DeliveryPolicy {
   policy_type: string;
   catalogue: DataCatalogue;
   transformations: Transformation;
-}
-
-export interface Transformation {
-  item_operator: string;
-  item_type: string;
-  organization_type: string;
-  organization_name: string;
-  json_path: string;
 }
 
 @Component({
@@ -43,8 +39,11 @@ export class PublisherComponent implements OnInit {
     // {policyId: 1, policyDate: new Date('2021-11-17'), policyType: "DATA_CONTENT_BASED"},
   ];
   newPublication: boolean = false;
-  displayedColumns: string[] = ['policyId', 'policyDate', 'policyType', 'edit_policy', 'delete_policy'];
-  dataSource = this.DELIVERY_DATA;
+  displayedColumns: string[] = ['id', 'created_at', 'policy_type', 'edit_policy', 'delete_policy'];
+  dataSource: MatTableDataSource<DeliveryPolicy>;
+
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+
   deliveryPolicyForm: FormGroup;
   policyTypes: ListTypes[];
   catalogues: DataCatalogue[] = [];
@@ -64,10 +63,12 @@ export class PublisherComponent implements OnInit {
   constructor(
     public appComponent: AppComponent,
     public publisherService: PublisherService,
+    public appService: AppService,
     public administratorService: AdministratorService,
     private confirmationDialogService: ConfirmationDialogService,
     private router: Router,
     private _fb: FormBuilder,
+    private adcLabel: AdcLabelPipe,
   ) {
     this.deliveryPolicyForm = this._fb.group({
       policy_id: [null, Validators.required],
@@ -100,7 +101,7 @@ export class PublisherComponent implements OnInit {
 
     if (!this.appComponent.user) {
       //   this.router.navigate(['/']);
-      this.appComponent.user = { id: 1, email: 'leo.grignon@thalesgroup.com', profile: 'administrator' };
+      this.appComponent.user = { id: 1, email: 'leo.grignon@thalesgroup.com', profile: 'publisher' };
     }
     this.getAllPolicies()
   }
@@ -128,7 +129,8 @@ export class PublisherComponent implements OnInit {
             )
           });
           // Add policies to publisher policies table
-          this.dataSource = this.DELIVERY_DATA;
+          this.dataSource = new MatTableDataSource(this.DELIVERY_DATA);
+          this.dataSource.sort = this.sort;
         }
       )
   }
@@ -199,7 +201,7 @@ export class PublisherComponent implements OnInit {
 
     if (item_type == 'organization_type') {
       // Get data catalogue elements from database
-      this.publisherService
+      this.appService
         .getOrganizationsType()
         .subscribe(
           (response) => {
@@ -211,7 +213,7 @@ export class PublisherComponent implements OnInit {
         )
     } else if (item_type == 'organization_name') {
       // Get data catalogue elements from database
-      this.publisherService
+      this.appService
         .getOrganizationsName()
         .subscribe(
           (response) => {
@@ -265,7 +267,7 @@ export class PublisherComponent implements OnInit {
           this.transformationList.splice(index, 1);
         }
       })
-      .catch(() => console.log('User dismissed the confirmed dialog'));   
+      .catch(() => console.log('User dismissed the confirmed dialog'));
   }
 
   drop(event: CdkDragDrop<string[]>) {
