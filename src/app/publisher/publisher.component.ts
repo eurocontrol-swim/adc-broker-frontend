@@ -70,6 +70,14 @@ export class PublisherComponent implements OnInit {
     private _fb: FormBuilder,
     private adcLabel: AdcLabelPipe,
   ) {
+    if (!this.appComponent.user) {
+      this.router.navigate(['/']);
+    } else if (this.appComponent.user.user_role != 'publisher') {
+      this.router.navigate([this.appComponent.user.user_role]);
+    } else {
+      this.getAllPolicies()
+    }
+
     this.deliveryPolicyForm = this._fb.group({
       policy_id: [null, Validators.required],
       policy_type: ['', Validators.required],
@@ -98,12 +106,7 @@ export class PublisherComponent implements OnInit {
       { value: 'organization_name', viewValue: 'Organization name' },
       { value: 'data_based', viewValue: 'Data based' }
     ]
-
-    if (!this.appComponent.user) {
-      //   this.router.navigate(['/']);
-      this.appComponent.user = { id: 1, email: 'leo.grignon@thalesgroup.com', profile: 'publisher' };
-    }
-    this.getAllPolicies()
+    
   }
 
   ngOnInit(): void {
@@ -162,6 +165,8 @@ export class PublisherComponent implements OnInit {
             )
             .subscribe(
               (response) => {
+                this.appComponent.openSnackBar(response.body.message, 'Close')
+
                 this.getAllPolicies();
               }
             )
@@ -238,6 +243,8 @@ export class PublisherComponent implements OnInit {
         )
         .subscribe(
           (response) => {
+            this.appComponent.openSnackBar(response.body.message, 'Close')
+            
             // Clear deliveryPolicyForm
             this.deliveryPolicyForm.reset();
             this.transformationList = [];

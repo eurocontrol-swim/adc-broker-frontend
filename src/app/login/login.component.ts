@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  errorMessage: string;
 
   constructor(
     private _fb: FormBuilder,
@@ -19,6 +20,9 @@ export class LoginComponent {
     private router: Router,
     private http: HttpClient,
   ) {
+    if (this.appComponent.user) {
+      this.router.navigate([this.appComponent.user.user_role]);
+    }
     this.loginForm = this._fb.group({
       username: ['', Validators.email],
       password: ['', Validators.required],
@@ -26,30 +30,32 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
+    this.errorMessage = null;
     if (this.loginForm.valid) {
-      const username = this.loginForm.get('username').value;
+      const email = this.loginForm.get('username').value;
       const password = this.loginForm.get('password').value;
 
       // Send values to service > to django > check Database > return userProfile
-      this.loginService(username, password)
+      this.loginService(email, password)
         .subscribe(
           (response) => {
-            console.log(response);
-            this.appComponent.user = { id: 1, email: 'leo.grignon@thalesgroup.com', profile: 'administrator' };
-            this.router.navigate(['/' + this.appComponent.user.profile + '']);
+            var data = response.body
+            // this.appComponent.user = { id: 1, email: 'leo.grignon@thalesgroup.com', profile: 'administrator' };
+            this.appComponent.user = data.user
+            this.router.navigate(['/' + this.appComponent.user.user_role + '']);
           })
     }
   }
 
   loginService(
-    username: string,
+    email: string,
     password: string,
   ): Observable<any> {
     const headers = { 'content-type': 'application/json' }
     return this.http.post<any>(
       'auth',
       {
-        'username': username,
+        'email': email,
         'password': password,
       }, {
       headers: headers,
@@ -58,7 +64,8 @@ export class LoginComponent {
     })
       .pipe(
         catchError((err) => {
-          console.error(err);
+          console.log(err.error)
+          this.errorMessage = err.error;
           throw err;
         }
         )

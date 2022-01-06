@@ -23,8 +23,9 @@
                 Password required
               </mat-error>
             </mat-form-field>
-            <p style="text-align: right;"><a href="/accounts/password_reset/" target="_blank">forgot password ?</a></p>
+            <p style="text-align: right;"><a href="/password_reset/" target="_blank">forgot password ?</a></p>
             <button mat-raised-button color="primary" (click)="onSubmit()">Login</button>
+            <p *ngIf="errorMessage" style="color:red">{{errorMessage}}</p>
           </form>
         </mat-card-content>
       </mat-card>

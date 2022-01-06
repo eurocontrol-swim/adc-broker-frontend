@@ -5,7 +5,7 @@
     <h1>Aviation Data Corridor</h1>
   </span>
   <span class="spacer"></span>
-  <span class="username" *ngIf="user"><b>{{user.email}}</b><br>{{user.profile | titlecase}}</span>
+  <span class="username" *ngIf="user"><b>{{user.email}}</b><br>{{user.user_role | titlecase}}</span>
   <button mat-icon-button *ngIf="user">
     <mat-icon>person</mat-icon>
   </button>
@@ -15,7 +15,7 @@
   <!-- <button mat-icon-button *ngIf="user">
     <mat-icon>more_vert</mat-icon>
   </button> -->
-  <button mat-icon-button *ngIf="user">
-    <mat-icon>logout</mat-icon>
+  <button mat-icon-button *ngIf="user" (click)="logout()">
+      <mat-icon>logout</mat-icon>
   </button>
 </div>

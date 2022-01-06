@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'publisher', component: PublisherComponent },
   { path: 'subscriber', component: SubscriberComponent },
   { path: 'login', component: LoginComponent },
+  { path: '**', redirectTo: '/login' }
 ];
 
 @NgModule({

@@ -1,9 +1,14 @@
 import { Component } from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 export interface User {
   id: number,
   email: string,
-  profile: string
+  first_name: string
+  last_name: string
+  name: string
+  type: string
+  user_role: string
 }
 
 export interface ListTypes {
@@ -25,7 +30,7 @@ export interface Transformation {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  user: User;
+  user: User = (<any>window).user_data
 
   userRoles: ListTypes[] = [
     { value: 'administrator', viewValue: 'Administrator' },
@@ -41,4 +46,12 @@ export class AppComponent {
     { value: 'ground_handler', viewValue: 'Ground handler' },
     { value: 'meteorological_service_provider', viewValue: 'Meteorological service provider' },
   ]
+
+  constructor(private _snackBar: MatSnackBar) {}
+
+  openSnackBar(message:string, action:string){
+    this._snackBar.open(message, action, { 
+      duration: 5000
+  });
+  }
 }
