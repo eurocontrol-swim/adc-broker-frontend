@@ -12,76 +12,81 @@
           </button>
         </div>
         <mat-card-content class="table_card">
-          <table *ngIf="usersDataSource.data.length > 0; else noUser" mat-table #sortUser="matSort" [dataSource]="usersDataSource" matSort>
-            <!-- Firstname Column -->
-            <ng-container matColumnDef="first_name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Firstname </th>
-              <td mat-cell *matCellDef="let element"> {{element.first_name | titlecase}} </td>
-            </ng-container>
+          <span *ngIf="usersDataSource; else noUser">
+            <!-- *ngIf="usersDataSource.data.length > 0; else noUser" -->
+            <table mat-table #sortUser="matSort" [dataSource]="usersDataSource" matSort>
+              <!-- Firstname Column -->
+              <ng-container matColumnDef="first_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Firstname </th>
+                <td mat-cell *matCellDef="let element"> {{element.first_name | titlecase}} </td>
+              </ng-container>
 
-            <!-- Lastname Column -->
-            <ng-container matColumnDef="last_name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Lastname </th>
-              <td mat-cell *matCellDef="let element"> {{element.last_name | titlecase}} </td>
-            </ng-container>
+              <!-- Lastname Column -->
+              <ng-container matColumnDef="last_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Lastname </th>
+                <td mat-cell *matCellDef="let element"> {{element.last_name | titlecase}} </td>
+              </ng-container>
 
-            <!-- Email Column -->
-            <ng-container matColumnDef="email">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
-              <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-            </ng-container>
+              <!-- Email Column -->
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+              </ng-container>
 
-            <!-- Password Column -->
-            <!-- <ng-container matColumnDef="password">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Password </th>
-              <td mat-cell *matCellDef="let element">
-                <mat-form-field>
-                  <input matInput readonly [type]="element.hidePassword ? 'password':'text'" [value]='element.password'>
-                  <mat-icon matSuffix (click)="element.hidePassword = !element.hidePassword">{{element.hidePassword ? 'visibility_off':'visibility'}}</mat-icon>
-                </mat-form-field>
-              </td>
-            </ng-container> -->
+              <!-- Password Column -->
+              <!-- <ng-container matColumnDef="password">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Password </th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-form-field>
+                    <input matInput readonly [type]="element.hidePassword ? 'password':'text'"
+                      [value]='element.password'>
+                    <mat-icon matSuffix (click)="element.hidePassword = !element.hidePassword">
+                      {{element.hidePassword ? 'visibility_off':'visibility'}}</mat-icon>
+                  </mat-form-field>
+                </td>
+              </ng-container> -->
 
-            <!-- Role Column -->
-            <ng-container matColumnDef="user_role">
-              <!-- *ngFor="let roles of appComponent.userRoles" -->
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
-              <td mat-cell *matCellDef="let element"> {{element.user_role | titlecase}} </td>
-            </ng-container>
+              <!-- Role Column -->
+              <ng-container matColumnDef="user_role">
+                <!-- *ngFor="let roles of appComponent.userRoles" -->
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+                <td mat-cell *matCellDef="let element"> {{element.user_role | titlecase}} </td>
+              </ng-container>
 
-            <!-- Organization name Column -->
-            <ng-container matColumnDef="organization_name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Organization name </th>
-              <td mat-cell *matCellDef="let element">{{element.organization_name | titlecase}}</td>
-            </ng-container>
+              <!-- Organization name Column -->
+              <ng-container matColumnDef="organization_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Organization name </th>
+                <td mat-cell *matCellDef="let element">{{element.organization_name | titlecase}}</td>
+              </ng-container>
 
-            <!-- Organization type Column -->
-            <ng-container matColumnDef="organization_type">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Organization type </th>
-              <td mat-cell *matCellDef="let element"> {{element.organization_type | adcLabel}}</td>
-            </ng-container>
+              <!-- Organization type Column -->
+              <ng-container matColumnDef="organization_type">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Organization type </th>
+                <td mat-cell *matCellDef="let element"> {{element.organization_type | adcLabel}}</td>
+              </ng-container>
 
-            <!-- Edit User Column -->
-            <ng-container matColumnDef="edit_user">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let element"> <button mat-icon-button matTooltip="Edit user"
-                  matTooltipPosition="right" color="primary" (click)="openDialogUser(element, 'edit')">
-                  <mat-icon>edit</mat-icon>
-                </button> </td>
-            </ng-container>
+              <!-- Edit User Column -->
+              <ng-container matColumnDef="edit_user">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element"> <button mat-icon-button matTooltip="Edit user"
+                    matTooltipPosition="right" color="primary" (click)="openDialogUser(element, 'edit')">
+                    <mat-icon>edit</mat-icon>
+                  </button> </td>
+              </ng-container>
 
-            <!-- Delete User Column -->
-            <ng-container matColumnDef="delete_user">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let element"> <button mat-icon-button matTooltip="Delete user"
-                  matTooltipPosition="right" color="primary" (click)="deleteUser(element.email)">
-                  <mat-icon>delete</mat-icon>
-                </button> </td>
-            </ng-container>
+              <!-- Delete User Column -->
+              <ng-container matColumnDef="delete_user">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element"> <button mat-icon-button matTooltip="Delete user"
+                    matTooltipPosition="right" color="primary" (click)="deleteUser(element.email)">
+                    <mat-icon>delete</mat-icon>
+                  </button> </td>
+              </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="usersDisplayedColumns;sticky: true"></tr>
-            <tr mat-row *matRowDef="let row; columns: usersDisplayedColumns;"></tr>
-          </table>
+              <tr mat-header-row *matHeaderRowDef="usersDisplayedColumns;sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: usersDisplayedColumns;"></tr>
+            </table>
+          </span>
           <ng-template #noUser>
             <p class="empty_table_msg">No users created, please create a new user</p>
           </ng-template>
@@ -101,49 +106,51 @@
           </button>
         </div>
         <mat-card-content class="table_card">
-          <table *ngIf="dataCatalogueSource.data.length > 0; else noData" mat-table #sortCatalogue="matSort"
-            [dataSource]="dataCatalogueSource" matSort>
-            <!-- Type Column -->
-            <ng-container matColumnDef="data_type">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
-              <td mat-cell *matCellDef="let element"> {{element.data_type | adcLabel}} </td>
-            </ng-container>
+          <span *ngIf="dataCatalogueSource; else noData">
+            <!-- *ngIf="dataCatalogueSource.data.length > 0; else noData" -->
+            <table mat-table #sortCatalogue="matSort" [dataSource]="dataCatalogueSource" matSort>
+              <!-- Type Column -->
+              <ng-container matColumnDef="data_type">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                <td mat-cell *matCellDef="let element"> {{element.data_type | adcLabel}} </td>
+              </ng-container>
 
-            <!-- Path Column -->
-            <ng-container matColumnDef="data_path">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Path </th>
-              <td mat-cell *matCellDef="let element"> {{element.data_path}} </td>
-            </ng-container>
+              <!-- Path Column -->
+              <ng-container matColumnDef="data_path">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Path </th>
+                <td mat-cell *matCellDef="let element"> {{element.data_path}} </td>
+              </ng-container>
 
-            <!-- Schema Column -->
-            <ng-container matColumnDef="data_schema">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Schema </th>
-              <td mat-cell *matCellDef="let element"> {{element.data_schema}} </td>
-            </ng-container>
+              <!-- Schema Column -->
+              <ng-container matColumnDef="data_schema">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Schema </th>
+                <td mat-cell *matCellDef="let element"> {{element.data_schema}} </td>
+              </ng-container>
 
-            <!-- Edit Data element Column -->
-            <ng-container matColumnDef="edit_data_element">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let element">
-                <button mat-icon-button matTooltip="Edit data element" matTooltipPosition="right" color="primary"
-                  (click)="openDialogData(element, 'edit')">
-                  <mat-icon>edit</mat-icon>
-                </button> </td>
-            </ng-container>
+              <!-- Edit Data element Column -->
+              <ng-container matColumnDef="edit_data_element">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                  <button mat-icon-button matTooltip="Edit data element" matTooltipPosition="right" color="primary"
+                    (click)="openDialogData(element, 'edit')">
+                    <mat-icon>edit</mat-icon>
+                  </button> </td>
+              </ng-container>
 
-            <!-- Delete Data element Column -->
-            <ng-container matColumnDef="delete_data_element">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let element">
-                <button mat-icon-button matTooltip="Delete data element" matTooltipPosition="right" color="primary"
-                  (click)="deleteDataElement(element.id)">
-                  <mat-icon>delete</mat-icon>
-                </button> </td>
-            </ng-container>
+              <!-- Delete Data element Column -->
+              <ng-container matColumnDef="delete_data_element">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                  <button mat-icon-button matTooltip="Delete data element" matTooltipPosition="right" color="primary"
+                    (click)="deleteDataElement(element.id)">
+                    <mat-icon>delete</mat-icon>
+                  </button> </td>
+              </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="dataCatalogueDisplayedColumns;sticky: true"></tr>
-            <tr mat-row *matRowDef="let row; columns: dataCatalogueDisplayedColumns;"></tr>
-          </table>
+              <tr mat-header-row *matHeaderRowDef="dataCatalogueDisplayedColumns;sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: dataCatalogueDisplayedColumns;"></tr>
+            </table>
+          </span>
           <ng-template #noData>
             <p class="empty_table_msg">No data available, please create a new data</p>
           </ng-template>

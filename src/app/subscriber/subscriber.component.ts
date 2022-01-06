@@ -11,6 +11,7 @@ import { AdministratorService } from '../administrator/administrator.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AdcLabelPipe } from '../app-label.pipe';
+import { Router } from '@angular/router';
 
 export interface SubcriberPolicy {
   id: number;
@@ -67,7 +68,17 @@ export class SubscriberComponent implements OnInit, AfterViewInit {
     private confirmationDialogService: ConfirmationDialogService,
     private _fb: FormBuilder,
     private adcLabel: AdcLabelPipe,
+    private router: Router,
   ) {
+
+    if (!this.appComponent.user) {
+      this.router.navigate(['/']);
+    } else if (this.appComponent.user.user_role != 'subscriber') {
+      this.router.navigate([this.appComponent.user.user_role]);
+    } else {
+      this.getAllPolicies()
+    }
+
     this.subscribePolicyForm = this._fb.group({
       policy_id: [null, Validators.required],
       policy_type: ['', Validators.required],
@@ -96,13 +107,6 @@ export class SubscriberComponent implements OnInit, AfterViewInit {
       { value: 'organization_name', viewValue: 'Organization name' },
       { value: 'data_based', viewValue: 'Data based' }
     ]
-
-    if (!this.appComponent.user) {
-      //   this.router.navigate(['/']);
-      this.appComponent.user = { id: 1, email: 'leo.grignon@thalesgroup.com', profile: 'subscriber' };
-    }
-
-    this.getAllPolicies()
   }
 
   ngOnInit(): void {
@@ -138,6 +142,8 @@ export class SubscriberComponent implements OnInit, AfterViewInit {
             )
             .subscribe(
               (response) => {
+                this.appComponent.openSnackBar(response.body.message, 'Close')
+
                 this.getAllPolicies();
               }
             )
@@ -240,6 +246,8 @@ export class SubscriberComponent implements OnInit, AfterViewInit {
         )
         .subscribe(
           (response) => {
+            this.appComponent.openSnackBar(response.body.message, 'Close')
+
             // Clear subscribePolicyForm
             this.subscribePolicyForm.reset();
             this.transformationList = [];
