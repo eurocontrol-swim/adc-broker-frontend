@@ -86,8 +86,8 @@ export class PublisherComponent implements OnInit {
         organization_name: [''],
         organization_type: [''],
         json_path: [''],
-        item_type: ['', Validators.required],
-        item_operator: ['', Validators.required],
+        item_type: [''],
+        item_operator: [''],
       })
     });
 
@@ -97,7 +97,8 @@ export class PublisherComponent implements OnInit {
     ]
 
     this.operators = [
-      { value: 'endpoint_restriction', viewValue: 'Endpoint restriction' },
+      { value: 'organization_name_endpoint_restriction', viewValue: 'Organization name endpoint restriction' },
+      { value: 'organization_type_endpoint_restriction', viewValue: 'Organization type endpoint restriction' },
       { value: 'payload_extraction', viewValue: 'Payload extraction' },
     ]
 
@@ -106,7 +107,7 @@ export class PublisherComponent implements OnInit {
       { value: 'organization_name', viewValue: 'Organization name' },
       { value: 'data_based', viewValue: 'Data based' }
     ]
-    
+
   }
 
   ngOnInit(): void {
@@ -199,12 +200,20 @@ export class PublisherComponent implements OnInit {
     this.deliveryPolicyForm.get('transformations').get('organization_type').reset();
     this.deliveryPolicyForm.get('transformations').get('organization_name').clearValidators();
     this.deliveryPolicyForm.get('transformations').get('organization_name').reset();
+    this.deliveryPolicyForm.get('transformations').get('json_path').clearValidators();
+    this.deliveryPolicyForm.get('transformations').get('json_path').reset();
+    this.deliveryPolicyForm.get('transformations').get('item_operator').clearValidators();
+    this.deliveryPolicyForm.get('transformations').get('item_operator').reset();
   }
 
   getOrganizations(item_type: string): void {
     this.resetTransformations();
 
-    if (item_type == 'organization_type') {
+    if (item_type == 'data_based') {
+      this.deliveryPolicyForm.get('transformations').get('json_path').setValidators(Validators.required);
+      this.deliveryPolicyForm.get('transformations').get('item_operator').setValidators(Validators.required);
+    }
+    else if (item_type == 'organization_type') {
       // Get data catalogue elements from database
       this.appService
         .getOrganizationsType()
@@ -232,7 +241,8 @@ export class PublisherComponent implements OnInit {
   }
 
   onPublish() {
-    if (this.deliveryPolicyForm.get('policy_type').valid && this.transformationList.length > 0) {
+    if (this.deliveryPolicyForm.get('policy_type').valid && this.deliveryPolicyForm.get('catalogue_id').valid) {
+      //  && this.transformationList.length > 0
       this.publisherService
         .postPublisherPolicy(
           this.deliveryPolicyForm.get('policy_id').value,
@@ -244,7 +254,7 @@ export class PublisherComponent implements OnInit {
         .subscribe(
           (response) => {
             this.appComponent.openSnackBar(response.body.message, 'Close')
-            
+
             // Clear deliveryPolicyForm
             this.deliveryPolicyForm.reset();
             this.transformationList = [];
