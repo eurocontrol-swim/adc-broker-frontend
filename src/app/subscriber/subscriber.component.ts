@@ -98,7 +98,8 @@ export class SubscriberComponent implements OnInit, AfterViewInit {
     ]
 
     this.operators = [
-      { value: 'endpoint_restriction', viewValue: 'Endpoint restriction' },
+      { value: 'organization_name_endpoint_restriction', viewValue: 'Organization name endpoint restriction' },
+      { value: 'organization_type_endpoint_restriction', viewValue: 'Organization type endpoint restriction' },
       { value: 'payload_extraction', viewValue: 'Payload extraction' },
     ]
 

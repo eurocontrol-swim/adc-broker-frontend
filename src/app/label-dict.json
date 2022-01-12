@@ -14,6 +14,8 @@
     "air_navigation_service_provider": "Air navigation service provider",
     "payload_extraction":"Payload extraction",
     "endpoint_restriction":"Endpoint restriction",
+    "organization_name_endpoint_restriction":"Organization name endpoint restriction",
+    "organization_type_endpoint_restriction":"Organization type endpoint restriction",
     "organization_type":"Organization type",
     "organization_name":"Organization name"
 }
