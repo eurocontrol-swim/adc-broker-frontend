@@ -79,7 +79,7 @@ export class PublisherComponent implements OnInit {
     }
 
     this.deliveryPolicyForm = this._fb.group({
-      policy_id: [null, Validators.required],
+      policy_id: [null],
       policy_type: ['', Validators.required],
       catalogue_id: ['', Validators.required],
       transformations: _fb.group({
@@ -141,6 +141,7 @@ export class PublisherComponent implements OnInit {
 
   getAllData(policy_type: string): void {
     this.catalogues = []
+    this.deliveryPolicyForm.get('catalogue_id').reset();
     // Get data catalogue elements from database
     this.administratorService
       .getDataCatalogue(
@@ -241,7 +242,7 @@ export class PublisherComponent implements OnInit {
   }
 
   onPublish() {
-    if (this.deliveryPolicyForm.get('policy_type').valid && this.deliveryPolicyForm.get('catalogue_id').valid) {
+    if (this.deliveryPolicyForm.valid) {
       //  && this.transformationList.length > 0
       this.publisherService
         .postPublisherPolicy(
@@ -249,7 +250,7 @@ export class PublisherComponent implements OnInit {
           this.deliveryPolicyForm.get('policy_type').value,
           this.deliveryPolicyForm.get('catalogue_id').value,
           this.transformationList,
-          this.appComponent.user.email, //TODO - GET USER EMAIL
+          this.appComponent.user.email,
         )
         .subscribe(
           (response) => {

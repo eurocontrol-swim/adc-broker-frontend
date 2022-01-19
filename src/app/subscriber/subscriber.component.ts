@@ -80,15 +80,15 @@ export class SubscriberComponent implements OnInit, AfterViewInit {
     }
 
     this.subscribePolicyForm = this._fb.group({
-      policy_id: [null, Validators.required],
+      policy_id: [null],
       policy_type: ['', Validators.required],
       catalogue_id: ['', Validators.required],
       transformations: _fb.group({
         organization_name: [''],
         organization_type: [''],
         json_path: [''],
-        item_type: ['', Validators.required],
-        item_operator: ['', Validators.required],
+        item_type: [''],
+        item_operator: [''],
       })
     });
 
@@ -182,6 +182,7 @@ export class SubscriberComponent implements OnInit, AfterViewInit {
 
   getAllData(policy_type: string): void {
     this.catalogues = []
+    this.subscribePolicyForm.get('catalogue_id').reset();
     // Get data catalogue elements from database
     this.administratorService
       .getDataCatalogue(
@@ -203,12 +204,20 @@ export class SubscriberComponent implements OnInit, AfterViewInit {
     this.subscribePolicyForm.get('transformations').get('organization_type').reset();
     this.subscribePolicyForm.get('transformations').get('organization_name').clearValidators();
     this.subscribePolicyForm.get('transformations').get('organization_name').reset();
+    this.subscribePolicyForm.get('transformations').get('json_path').clearValidators();
+    this.subscribePolicyForm.get('transformations').get('json_path').reset();
+    this.subscribePolicyForm.get('transformations').get('item_operator').clearValidators();
+    this.subscribePolicyForm.get('transformations').get('item_operator').reset();
   }
 
   getOrganizations(item_type: string): void {
     this.resetTransformations();
 
-    if (item_type == 'organization_type') {
+    if (item_type == 'data_based') {
+      this.subscribePolicyForm.get('transformations').get('json_path').setValidators(Validators.required);
+      this.subscribePolicyForm.get('transformations').get('item_operator').setValidators(Validators.required);
+    }
+    else if (item_type == 'organization_type') {
       // Get data catalogue elements from database
       this.appService
         .getOrganizationsType()
@@ -236,14 +245,14 @@ export class SubscriberComponent implements OnInit, AfterViewInit {
   }
 
   onPublish() {
-    if (this.subscribePolicyForm.get('policy_type').valid && this.transformationList.length > 0) {
+    if (this.subscribePolicyForm.valid) {
       this.subscriberService
         .postSubscriberPolicy(
           this.subscribePolicyForm.get('policy_id').value,
           this.subscribePolicyForm.get('policy_type').value,
           this.subscribePolicyForm.get('catalogue_id').value,
           this.transformationList,
-          this.appComponent.user.email, //TODO - GET USER EMAIL
+          this.appComponent.user.email,
         )
         .subscribe(
           (response) => {
