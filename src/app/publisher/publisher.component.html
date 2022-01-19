@@ -126,7 +126,7 @@
             <h5>Transformations list</h5>
             <div formGroupName="transformations" class="transformations-panel">
               <div class="row">
-                <div class="col-4">
+                <div class="col-6">
                   <mat-form-field>
                     <mat-label>Item type</mat-label>
                     <mat-select formControlName="item_type" (selectionChange)="getOrganizations($event.value)">
@@ -135,7 +135,7 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="col-4">
+                <div class="col-6">
                   <mat-form-field *ngIf="organizationsName.length > 0">
                     <mat-label>Organizations name</mat-label>
                     <mat-select formControlName="organization_name">
@@ -171,9 +171,14 @@
               </div>
 
               <div style="text-align: center; margin-bottom: 10px;">
-                <button mat-raised-button [disabled]="deliveryPolicyForm.get('transformations').invalid" color="primary"
-                  (click)="addTransformItem()">
+                <button mat-raised-button
+                  [disabled]="deliveryPolicyForm.get('transformations').get('item_type').value == '' || deliveryPolicyForm.get('transformations').invalid"
+                  color="primary" (click)="addTransformItem()">
                   <mat-icon>add</mat-icon> Add transformation item
+                </button>
+                <button mat-stroked-button style="margin-left: 20px;"
+                  (click)="deliveryPolicyForm.get('transformations').reset(); resetTransformations();">
+                  Reset transformation item
                 </button>
               </div>
 
@@ -216,7 +221,7 @@
         <mat-card-actions>
           <button mat-button
             (click)="newPublication = !newPublication; create_or_update = !create_or_update; resetTransformations(); transformationList = []; deliveryPolicyForm.reset()">Cancel</button>
-          <button mat-raised-button color="primary" [disabled]="deliveryPolicyForm.get('policy_type').invalid && deliveryPolicyForm.get('catalogue_id').invalid"
+          <button mat-raised-button color="primary" [disabled]="deliveryPolicyForm.invalid"
             (click)="onPublish()">{{create_or_update ? 'Publish':'Update'}} policy</button>
         </mat-card-actions>
       </mat-card>

@@ -61,9 +61,9 @@
                     <p><b>Catalogue element</b></p>
                     <p>id: {{catalogue.id}}</p>
                     <p>Data path: {{catalogue.data_path}}</p>
-                    <p>
+                    <!-- <p>
                       {{catalogue.data_schema ? 'Data schema: '+catalogue.data_schema : null}}
-                    </p>
+                    </p> -->
                     <p>
                       {{catalogue.data_type ? 'Data type: '+(catalogue.data_type | adcLabel) : null}}
                     </p>
@@ -120,7 +120,7 @@
                 <mat-option *ngFor="let catalogue of catalogues" [value]="catalogue.id">
                   <li><b>id:</b> {{catalogue.id}}</li>
                   <li><b>Data path:</b> {{catalogue.data_path}}</li>
-                  <li><b>Data schema:</b> {{catalogue.data_schema}}</li>
+                  <!-- <li><b>Data schema:</b> {{catalogue.data_schema}}</li> -->
                   <li><b>Data type:</b> {{catalogue.data_type | adcLabel}}</li>
                 </mat-option>
               </mat-select>
@@ -129,35 +129,19 @@
             <h5>Transformations list</h5>
             <div formGroupName="transformations" class="transformations-panel">
               <div class="row">
-                <div class="col-4">
-                  <mat-form-field>
-                    <mat-label>Operators</mat-label>
-                    <mat-select formControlName="item_operator" required>
-                      <mat-option *ngFor="let operator of operators" [value]="operator.value">
-                        {{operator.viewValue}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <div class="col-8">
-                  <mat-form-field>
-                    <input matInput placeholder="Json path" formControlName="json_path" required>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-4">
+                <div class="col-6">
                   <mat-form-field>
                     <mat-label>Item type</mat-label>
-                    <mat-select formControlName="item_type" required (selectionChange)="getOrganizations($event.value)">
+                    <mat-select formControlName="item_type" (selectionChange)="getOrganizations($event.value)">
                       <mat-option *ngFor="let type of types" [value]="type.value">
                         {{type.viewValue}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="col-4">
+                <div class="col-6">
                   <mat-form-field *ngIf="organizationsName.length > 0">
                     <mat-label>Organizations name</mat-label>
-                    <mat-select formControlName="organization_name" required>
+                    <mat-select formControlName="organization_name">
                       <mat-option *ngFor="let name of organizationsName" [value]="name">
                         {{name | titlecase}}</mat-option>
                     </mat-select>
@@ -165,18 +149,39 @@
 
                   <mat-form-field *ngIf="organizationsType.length > 0">
                     <mat-label>Organizations type</mat-label>
-                    <mat-select formControlName="organization_type" required>
+                    <mat-select formControlName="organization_type">
                       <mat-option *ngFor="let type of organizationsType" [value]="type">
                         {{type | titlecase}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
               </div>
+              <div class="row"
+                *ngIf="subscribePolicyForm.get('transformations').get('item_type').value == 'data_based'">
+                <div class="col-8">
+                  <mat-form-field>
+                    <input matInput placeholder="Json path" formControlName="json_path">
+                  </mat-form-field>
+                </div>
+                <div class="col-4">
+                  <mat-form-field>
+                    <mat-label>Operators</mat-label>
+                    <mat-select formControlName="item_operator">
+                      <mat-option *ngFor="let operator of operators" [value]="operator.value">
+                        {{operator.viewValue}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
 
               <div style="text-align: center; margin-bottom: 10px;">
-                <button mat-raised-button [disabled]="subscribePolicyForm.get('transformations').invalid"
+                <button mat-raised-button [disabled]="subscribePolicyForm.get('transformations').get('item_type').value == '' || subscribePolicyForm.get('transformations').invalid"
                   color="primary" (click)="addTransformItem()">
                   <mat-icon>add</mat-icon> Add transformation item
+                </button>
+                <button mat-stroked-button style="margin-left: 20px;"
+                (click)="subscribePolicyForm.get('transformations').reset(); resetTransformations();">
+                  Reset transformation item
                 </button>
               </div>
 
@@ -219,8 +224,7 @@
         <mat-card-actions>
           <button mat-button
             (click)="newPublication = !newPublication; create_or_update = !create_or_update; resetTransformations(); transformationList = []; subscribePolicyForm.reset()">Cancel</button>
-          <button mat-raised-button color="primary"
-            [disabled]="subscribePolicyForm.get('policy_type').invalid || (transformationList.length <=0)"
+          <button mat-raised-button color="primary" [disabled]="subscribePolicyForm.invalid"
             (click)="onPublish()">{{create_or_update ? 'Publish':'Update'}} policy</button>
         </mat-card-actions>
       </mat-card>
