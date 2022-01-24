@@ -18,5 +18,5 @@ RUN	npm install -g @angular/cli
 # Copy app files.
 COPY . /app
 
-ENTRYPOINT ["ng", "build", "--outputHashing=none", "--output-path=/shared/dist/out", "--watch"]
+ENTRYPOINT ["sh", "-c", "ng build --outputHashing=none --output-path=${STATIC_FILES_DIRS}"]
 
