@@ -80,14 +80,14 @@ export class PublisherComponent implements OnInit {
 
     this.deliveryPolicyForm = this._fb.group({
       policy_id: [null],
-      policy_type: ['', Validators.required],
-      catalogue_id: ['', Validators.required],
+      policy_type: [null, Validators.required],
+      catalogue_id: [null, Validators.required],
       transformations: _fb.group({
-        organization_name: [''],
-        organization_type: [''],
-        json_path: [''],
-        item_type: [''],
-        item_operator: [''],
+        organization_name: [null],
+        organization_type: [null],
+        json_path: [null],
+        item_type: [null],
+        item_operator: [null],
       })
     });
 
@@ -167,7 +167,7 @@ export class PublisherComponent implements OnInit {
             )
             .subscribe(
               (response) => {
-                this.appComponent.openSnackBar(response.body.message, 'Close')
+                this.appComponent.openSnackBar(response.message, 'Close')
 
                 this.getAllPolicies();
               }
@@ -180,7 +180,6 @@ export class PublisherComponent implements OnInit {
   editPolicy(policy: any) {
     this.create_or_update = false;
     this.newPublication = true;
-    console.log(policy)
     this.getAllData(policy.policy_type);
     this.deliveryPolicyForm.patchValue({
       policy_id: policy.id,
