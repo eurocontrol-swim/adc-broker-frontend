@@ -81,14 +81,14 @@ export class SubscriberComponent implements OnInit, AfterViewInit {
 
     this.subscribePolicyForm = this._fb.group({
       policy_id: [null],
-      policy_type: ['', Validators.required],
-      catalogue_id: ['', Validators.required],
+      policy_type: [null, Validators.required],
+      catalogue_id: [null, Validators.required],
       transformations: _fb.group({
-        organization_name: [''],
-        organization_type: [''],
-        json_path: [''],
-        item_type: [''],
-        item_operator: [''],
+        organization_name: [null],
+        organization_type: [null],
+        json_path: [null],
+        item_type: [null],
+        item_operator: [null],
       })
     });
 
@@ -143,7 +143,7 @@ export class SubscriberComponent implements OnInit, AfterViewInit {
             )
             .subscribe(
               (response) => {
-                this.appComponent.openSnackBar(response.body.message, 'Close')
+                this.appComponent.openSnackBar(response.message, 'Close')
 
                 this.getAllPolicies();
               }
