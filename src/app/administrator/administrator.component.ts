@@ -24,7 +24,7 @@ export interface Users {
 export interface DataCatalogue {
   id: number,
   data_type: string;
-  data_schema: string;
+  // data_schema: string;
   data_path: string;
 }
 
@@ -58,7 +58,7 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
 
   usersDisplayedColumns: string[] = ['first_name', 'last_name', 'email', /*'password',*/ 'user_role', 'organization_name', 'organization_type', 'edit_user', 'delete_user'];
   usersDataSource: MatTableDataSource<Users>;
-  dataCatalogueDisplayedColumns: string[] = ['data_type', 'data_path', 'data_schema', 'edit_data_element', 'delete_data_element'];
+  dataCatalogueDisplayedColumns: string[] = ['data_type', 'data_path', /*'data_schema',*/ 'edit_data_element', 'delete_data_element'];
   dataCatalogueSource: MatTableDataSource<DataCatalogue>;
 
   constructor(
@@ -286,7 +286,7 @@ export class DialogAddData implements OnInit {
       id: [null],
       type: ['', Validators.required],
       path: ['', Validators.required],
-      schema: [''],
+      // schema: [''],
     })
   }
 
@@ -296,7 +296,7 @@ export class DialogAddData implements OnInit {
         id: this.dialog_data.data.id,
         type: this.dialog_data.data.data_type,
         path: this.dialog_data.data.data_path,
-        schema: this.dialog_data.data.data_schema,
+        // schema: this.dialog_data.data.data_schema,
       })
     }
   }
