@@ -71,7 +71,12 @@
                     <p>
                       {{transformation.item_type == 'organization_type' ? 'Organization type: '+(transformation.organization_type | adcLabel) : null}}
                     </p>
-                    <p>Json path: "{{transformation.json_path}}"</p>
+                    <p>
+                      {{transformation.item_type == 'data_based' ? 'Json path: ' + transformation.json_path : null }}
+                    </p>
+                    <p>
+                      {{transformation.item_type == 'data_based' ? 'Operator: ' + (transformation.item_operator | adcLabel) : null }}
+                    </p>
                   </div>
                 </div>
               </td>
@@ -171,12 +176,13 @@
               </div>
 
               <div style="text-align: center; margin-bottom: 10px;">
-                <button mat-raised-button [disabled]="deliveryPolicyForm.get('transformations').get('item_type').value == null || deliveryPolicyForm.get('transformations').invalid" color="primary"
-                  (click)="addTransformItem()">
+                <button mat-raised-button
+                  [disabled]="deliveryPolicyForm.get('transformations').get('item_type').value == null || deliveryPolicyForm.get('transformations').invalid"
+                  color="primary" (click)="addTransformItem()">
                   <mat-icon>add</mat-icon> Add transformation item
                 </button>
                 <button mat-stroked-button style="margin-left: 20px;"
-                (click)="deliveryPolicyForm.get('transformations').reset(); resetTransformations();">
+                  (click)="deliveryPolicyForm.get('transformations').reset(); resetTransformations();">
                   Reset transformation item
                 </button>
               </div>
@@ -187,8 +193,8 @@
                     <thead>
                       <tr>
                         <th scope="col"># Order</th>
-                        <th scope="col">Operator</th>
                         <th scope="col">Type</th>
+                        <th scope="col">Operator</th>
                         <th scope="col">Json path</th>
                       </tr>
                     </thead>
@@ -199,11 +205,11 @@
                             <mat-icon>drag_indicator</mat-icon>{{i}}
                           </div>
                         </th>
-                        <td>{{ transformation.item_operator | adcLabel }}</td>
                         <td>{{ transformation.item_type | adcLabel }}
                           {{ transformation.item_type == 'organization_type' ? ': '+(transformation.organization_type | adcLabel) : null }}
                           {{ transformation.item_type == 'organization_name' ? ': '+(transformation.organization_name | adcLabel) : null }}
                         </td>
+                        <td>{{ transformation.item_operator | adcLabel }}</td>
                         <td>{{ transformation.json_path }}</td>
                         <td><button mat-icon-button (click)="deleteTransformationElement(i)"
                             matTooltip="Delete transformation" matTooltipPosition="right">
