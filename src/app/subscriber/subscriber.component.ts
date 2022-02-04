@@ -183,6 +183,17 @@ export class SubscriberComponent implements OnInit, AfterViewInit {
   getAllData(policy_type: string): void {
     this.catalogues = []
     this.subscribePolicyForm.get('catalogue_id').reset();
+    this.transformationList = [];
+    this.subscribePolicyForm.get('transformations').reset();
+
+    // Add or delete data_based on the types list
+    if ((policy_type == 'topic_based') && (this.types.length > 2)) {
+      this.types.pop()
+    }
+    else if ((policy_type == 'data_structure_based') && (this.types.length < 3)) {
+      this.types.push({ value: 'data_based', viewValue: 'Data based' })
+    }
+
     // Get data catalogue elements from database
     this.administratorService
       .getDataCatalogue(

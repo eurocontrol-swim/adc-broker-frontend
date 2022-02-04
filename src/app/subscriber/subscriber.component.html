@@ -180,13 +180,14 @@
               </div>
 
               <div style="text-align: center; margin-bottom: 10px;">
-                <button mat-raised-button [disabled]="subscribePolicyForm.get('transformations').get('item_type').value == null || subscribePolicyForm.get('transformations').invalid"
+                <button mat-stroked-button style="margin-right: 20px;"
+                  (click)="subscribePolicyForm.get('transformations').reset(); resetTransformations();">
+                  Reset transformation item
+                </button>
+                <button mat-raised-button
+                  [disabled]="subscribePolicyForm.get('transformations').get('item_type').value == null || subscribePolicyForm.get('transformations').invalid"
                   color="primary" (click)="addTransformItem()">
                   <mat-icon>add</mat-icon> Add transformation item
-                </button>
-                <button mat-stroked-button style="margin-left: 20px;"
-                (click)="subscribePolicyForm.get('transformations').reset(); resetTransformations();">
-                  Reset transformation item
                 </button>
               </div>
 
