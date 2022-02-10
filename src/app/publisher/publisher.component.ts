@@ -156,7 +156,8 @@ export class PublisherComponent implements OnInit {
     // Get data catalogue elements from database
     this.administratorService
       .getDataCatalogue(
-        policy_type
+        policy_type,
+        this.appComponent.user.email
       )
       .subscribe(
         (response) => {
@@ -176,13 +177,16 @@ export class PublisherComponent implements OnInit {
               policy_id,
               this.appComponent.user.email,
             )
-            .subscribe(
-              (response) => {
+            .subscribe({
+              next: (response) => {
                 this.appComponent.openSnackBar(response.message, 'Close')
 
                 this.getAllPolicies();
-              }
-            )
+              },
+              error: (err) => {
+                this.appComponent.openSnackBar(err.error, 'Close')
+              },
+            })
         }
       })
       .catch(() => console.log('User dismissed the confirmed dialog'));
