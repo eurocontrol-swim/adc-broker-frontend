@@ -197,7 +197,8 @@ export class SubscriberComponent implements OnInit, AfterViewInit {
     // Get data catalogue elements from database
     this.administratorService
       .getDataCatalogue(
-        policy_type
+        policy_type,
+        this.appComponent.user.email
       )
       .subscribe(
         (response) => {

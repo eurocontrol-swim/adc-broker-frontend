@@ -107,7 +107,8 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
   getAllData(): void {
     // Get data catalogue elements from database
     this.administratorService
-      .getDataCatalogue(null)
+      .getDataCatalogue(null,
+        this.appComponent.user.email)
       .subscribe(
         (response) => {
           this.DATA_CATALOGUE = []
@@ -184,6 +185,7 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
           this.administratorService
             .deleteDataElement(
               data_id,
+              this.appComponent.user.email
             )
             .subscribe({
               next: (response) => {
@@ -302,9 +304,11 @@ export class DialogAddData implements OnInit {
   }
 
   submitData(): void {
+    console.log(this.appComponent.user)
     this.administratorService
       .addDataCatalogue(
         this.createDataform.value,
+        this.appComponent.user.email
       )
       .subscribe({
         next: (response) => {
