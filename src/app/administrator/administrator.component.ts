@@ -36,6 +36,7 @@ export interface DialogUser {
 export interface DialogData {
   data: DataCatalogue;
   action: string;
+  user: User;
 }
 
 @Component({
@@ -147,7 +148,7 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
         disableClose: true,
         closeOnNavigation: true,
         hasBackdrop: true,
-        data: { 'data': element, 'action': action }
+        data: { 'data': element, 'action': action, 'user': this.appComponent.user }
       });
 
     dialogAddData.afterClosed().subscribe(result => {
@@ -304,11 +305,10 @@ export class DialogAddData implements OnInit {
   }
 
   submitData(): void {
-    console.log(this.appComponent.user)
     this.administratorService
       .addDataCatalogue(
         this.createDataform.value,
-        this.appComponent.user.email
+        this.dialog_data.user.email
       )
       .subscribe({
         next: (response) => {
