@@ -157,13 +157,14 @@ export class AdministratorComponent implements AfterViewInit, OnInit {
     });
   }
 
-  deleteUser(user_email: string) {
-    this.confirmationDialogService.confirm('Delete user', 'Please confirm the deletion of the user: "' + user_email + '"', 'Delete the user', 'Cancel')
+  deleteUser(email: string) {
+    this.confirmationDialogService.confirm('Delete user', 'Please confirm the deletion of the user: "' + email + '"', 'Delete the user', 'Cancel')
       .then((confirmed: boolean) => {
         if (confirmed) {
           this.administratorService
             .deleteUser(
-              user_email,
+              this.appComponent.user.email,
+              email
             )
             .subscribe({
               next: (response) => {
