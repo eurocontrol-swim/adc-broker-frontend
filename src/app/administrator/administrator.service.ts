@@ -52,14 +52,15 @@ export class AdministratorService {
   }
 
   deleteUser(
-    user_email: string
+    user: string,
+    email: string
   ): Observable<any> {
     const headers = { 'content-type': 'application/json' }
     return this.http.delete<any>(
       'api/deleteUser',
       {
         headers: headers,
-        body: { 'user_email': user_email },
+        body: { 'user': user, 'email': email },
       }
     )
       .pipe(
