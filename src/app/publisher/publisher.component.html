@@ -145,7 +145,7 @@
                     <mat-label>Organizations name</mat-label>
                     <mat-select formControlName="organization_name">
                       <mat-option *ngFor="let name of organizationsName" [value]="name">
-                        {{name | titlecase}}</mat-option>
+                        {{name}}</mat-option>
                     </mat-select>
                   </mat-form-field>
 
@@ -225,9 +225,9 @@
         </mat-card-content>
         <mat-card-actions>
           <button mat-button
-            (click)="newPublication = !newPublication; create_or_update = !create_or_update; resetTransformations(); transformationList = []; deliveryPolicyForm.reset()">Cancel</button>
+            (click)="newPublication = !newPublication; create_or_update = true; resetTransformations(); transformationList = []; deliveryPolicyForm.reset()">Cancel</button>
           <button mat-raised-button color="primary" [disabled]="deliveryPolicyForm.invalid"
-            (click)="onPublish()">{{create_or_update ? 'Publish':'Update'}} policy</button>
+            (click)="onPublish(); create_or_update = true">{{create_or_update ? 'Publish':'Update'}} policy</button>
         </mat-card-actions>
       </mat-card>
     </div>
