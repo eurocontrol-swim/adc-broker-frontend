@@ -60,7 +60,7 @@
                   <div class="transformations" *ngFor="let catalogue of element.catalogue">
                     <p><b>Catalogue element</b></p>
                     <p>id: {{catalogue.id}}</p>
-                    <p>Data path: {{catalogue.data_path}}</p>
+                    <p>Data name: {{catalogue.data_path}}</p>
                     <!-- <p>
                       {{catalogue.data_schema ? 'Data schema: '+catalogue.data_schema : null}}
                     </p> -->
@@ -72,10 +72,10 @@
                     <p><b>Transformation #{{transformation.item_order}}</b></p>
                     <p>Item type: {{transformation.item_type | adcLabel}}</p>
                     <p>
-                      {{transformation.item_type == 'organization_name' ? 'Organization name: '+(transformation.organization_name | adcLabel) : null}}
+                      {{transformation.item_type == 'organization_name' ? 'Organization name: '+(transformation.organization_name) : null}}
                     </p>
                     <p>
-                      {{transformation.item_type == 'organization_type' ? 'Organization type: '+(transformation.organization_type | adcLabel) : null}}
+                      {{transformation.item_type == 'organization_type' ? 'Organization type: '+(transformation.organization_type) : null}}
                     </p>
                     <p>
                       {{transformation.item_type == 'data_based' ? 'Json path: ' + transformation.json_path : null }}
@@ -124,7 +124,7 @@
               <mat-select id="catalogue_id" formControlName="catalogue_id" required [disabled]="catalogues.length <= 0">
                 <mat-option *ngFor="let catalogue of catalogues" [value]="catalogue.id">
                   <li><b>id:</b> {{catalogue.id}}</li>
-                  <li><b>Data path:</b> {{catalogue.data_path}}</li>
+                  <li><b>Data name:</b> {{catalogue.data_path}}</li>
                   <!-- <li><b>Data schema:</b> {{catalogue.data_schema}}</li> -->
                   <li><b>Data type:</b> {{catalogue.data_type | adcLabel}}</li>
                 </mat-option>
@@ -210,8 +210,8 @@
                           </div>
                         </th>
                         <td>{{ transformation.item_type | adcLabel }}
-                          {{ transformation.item_type == 'organization_type' ? ': '+(transformation.organization_type | adcLabel) : null }}
-                          {{ transformation.item_type == 'organization_name' ? ': '+(transformation.organization_name | adcLabel) : null }}
+                          {{ transformation.item_type == 'organization_type' ? ': '+(transformation.organization_type) : null }}
+                          {{ transformation.item_type == 'organization_name' ? ': '+(transformation.organization_name) : null }}
                         </td>
                         <td>{{ transformation.item_operator | adcLabel }}</td>
                         <td>{{ transformation.json_path }}</td>
