@@ -28,7 +28,7 @@
     <mat-form-field>
       <mat-label>Role</mat-label>
       <mat-select formControlName="role" required>
-        <mat-option *ngFor="let roles of appComponent.userRoles" [value]="roles.value">{{roles.viewValue}}</mat-option>
+        <mat-option *ngFor="let roles of appComponent.userRoles" [value]="roles.value">{{roles.value}}</mat-option>
       </mat-select>
       <mat-error>
         Role required
@@ -44,7 +44,7 @@
       <mat-label>Organization type</mat-label>
       <mat-select formControlName="organization_type" required>
         <mat-option *ngFor="let organizations of appComponent.organizationTypes" [value]="organizations.value">
-          {{organizations.viewValue}}</mat-option>
+          {{organizations.value}}</mat-option>
       </mat-select>
       <mat-error>
         Organization type required
