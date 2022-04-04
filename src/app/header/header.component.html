@@ -6,7 +6,7 @@
   </span>
   <span class="spacer"></span>
   <span class="username" *ngIf="user"><b>{{user.email}}</b><br><b>Organization:</b> {{user.name}} -
-    {{user.type | adcLabel}}<br><b>Role:</b> {{user.user_role | titlecase}}</span>
+    {{user.type}}<br><b>Role:</b> {{user.user_role}}</span>
   <button mat-icon-button *ngIf="user" (click)="logout()" matTooltip="Logout" matTooltipPosition="right">
     <mat-icon>logout</mat-icon>
   </button>
