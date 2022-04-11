@@ -100,6 +100,8 @@ export class PublisherComponent implements OnInit {
       { value: 'organization_name_endpoint_restriction', viewValue: 'Organization name endpoint restriction' },
       { value: 'organization_type_endpoint_restriction', viewValue: 'Organization type endpoint restriction' },
       { value: 'payload_extraction', viewValue: 'Payload extraction' },
+      { value: 'subscriber_orgname_filtering', viewValue: 'Subscriber orgname filtering' },
+      { value: 'subscriber_orgtype_filtering', viewValue: 'Subscriber orgtype filtering' },
     ]
 
     this.types = [
