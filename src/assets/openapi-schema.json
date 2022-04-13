@@ -21,16 +21,20 @@
     "https",
     "http"
   ],
-  "tags": [{
-    "name": "Users",
-    "description": "Everything about users"
-  }, {
-    "name": "Data Catalogue",
-    "description": "Everything about Data Catalogue"
-  }, {
-    "name": "Publisher policies",
-    "description": "Everything about Publisher policies"
-  }],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Everything about users"
+    },
+    {
+      "name": "Data Catalogue",
+      "description": "Everything about Data Catalogue"
+    },
+    {
+      "name": "Publisher policies",
+      "description": "Everything about Publisher policies"
+    }
+  ],
   "paths": {
     "/auth": {
       "post": {
@@ -41,30 +45,32 @@
         "consumes": [
           "application/json"
         ],
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "description": "User credentials",
-          "schema": {
-            "type": "object",
-            "required": [
-              "email",
-              "password"
-            ],
-            "properties": {
-              "email": {
-                "type": "string"
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User credentials",
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "password"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
               },
-              "password": {
-                "type": "string"
+              "example": {
+                "email": "admin@mail.com",
+                "password": "admin"
               }
-            },
-            "example": {
-              "email": "admin@mail.com",
-              "password": "admin"
             }
           }
-        }],
+        ],
         "produces": [
           "application/json"
         ],
@@ -93,71 +99,87 @@
         "consumes": [
           "application/json"
         ],
-        "security": [{
-          "csrftoken": []
-        }],
-        "parameters": [{
-          "in": "cookie",
-          "name": "csrftoken",
-          "schema": {
-            "type": "string"
+        "security": [
+          {
+            "csrftoken": []
           }
-        }, {
-          "in": "body",
-          "description": "User informations",
-          "schema": {
-            "type": "object",
-            "required": [
-              "id",
-              "firstname",
-              "lastname",
-              "email",
-              "password",
-              "role",
-              "organization_name",
-              "organization_type"
-            ],
-            "properties": {
-              "id": {
-                "type": "integer",
-                "nullable": true
+        ],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "csrftoken",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "description": "User informations",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "firstname",
+                "lastname",
+                "email",
+                "password",
+                "role",
+                "organization_name",
+                "organization_type"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "firstname": {
+                  "type": "string"
+                },
+                "lastname": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "administrator",
+                    "publisher",
+                    "subscriber"
+                  ]
+                },
+                "organization_name": {
+                  "type": "string"
+                },
+                "organization_type": {
+                  "type": "string",
+                  "enum": [
+                    "airline",
+                    "airport_operator",
+                    "air_navigation_service_provider",
+                    "network_manager",
+                    "ground_handler",
+                    "meteorological_service_provider"
+                  ]
+                }
               },
-              "firstname": {
-                "type": "string"
-              },
-              "lastname": {
-                "type": "string"
-              },
-              "email": {
-                "type": "string"
-              },
-              "password": {
-                "type": "string"
-              },
-              "role": {
-                "type": "string",
-                "enum": ["administrator", "publisher", "subscriber"]
-              },
-              "organization_name": {
-                "type": "string"
-              },
-              "organization_type": {
-                "type": "string",
-                "enum": ["airline", "airport_operator", "air_navigation_service_provider", "network_manager", "ground_handler", "meteorological_service_provider"]
+              "example": {
+                "id": 1,
+                "firstname": "Jhon",
+                "lastname": "Doe",
+                "email": "jhon.doe@mail.com",
+                "password": "Jp@ssword",
+                "role": "subscriber",
+                "organization_name": "easyJet",
+                "organization_type": "airline"
               }
-            },
-            "example": {
-              "id": 1,
-              "firstname": "Jhon",
-              "lastname": "Doe",
-              "email": "jhon.doe@mail.com",
-              "password": "Jp@ssword",
-              "role": "subscriber",
-              "organization_name": "easyJet",
-              "organization_type": "airline"
             }
           }
-        }],
+        ],
         "produces": [
           "application/json"
         ],
@@ -194,49 +216,57 @@
         "consumes": [
           "application/json"
         ],
-        "security": [{
-          "csrftoken": []
-        }],
-        "parameters": [{
-          "in": "cookie",
-          "name": "csrftoken",
-          "schema": {
-            "type": "string"
+        "security": [
+          {
+            "csrftoken": []
           }
-        }, {
-          "in": "body",
-          "description": "Data catalogue element",
-          "schema": {
-            "type": "object",
-            "required": [
-              "id",
-              "type",
-              "path",
-              "email"
-            ],
-            "properties": {
-              "id": {
-                "type": "integer"
+        ],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "csrftoken",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "description": "Data catalogue element",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "type",
+                "path",
+                "email"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "topic_element",
+                    "data_element"
+                  ]
+                },
+                "path": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
               },
-              "type": {
-                "type": "string",
-                "enum": ["topic_element", "data_element"]
-              },
-              "path": {
-                "type": "string"
-              },
-              "email": {
-                "type": "string"
+              "example": {
+                "id": 1,
+                "type": "topic_element",
+                "path": "all.topics",
+                "email": "jhon.doe@mail.com"
               }
-            },
-            "example": {
-              "id": 1,
-              "type": "topic_element",
-              "path": "all.topics",
-              "email": "jhon.doe@mail.com"
             }
           }
-        }],
+        ],
         "produces": [
           "application/json"
         ],
@@ -276,41 +306,46 @@
         "consumes": [
           "application/json"
         ],
-        "security": [{
-          "csrftoken": []
-        }],
-        "parameters": [{
-          "in": "cookie",
-          "name": "csrftoken",
-          "schema": {
-            "type": "string"
+        "security": [
+          {
+            "csrftoken": []
           }
-        }, {
-          "in": "body",
-          "description": "Data catalogue element",
-          "schema": {
-            "type": "object",
-            "required": [
-              "email",
-              "policy_type"
-            ],
-            "properties": {
-              "email": {
-                "type": "string",
-                "description": "Administrator email"
+        ],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "csrftoken",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "description": "Data catalogue element",
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "policy_type"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "Administrator email"
+                },
+                "policy_type": {
+                  "type": "string",
+                  "nullable": true,
+                  "description": "Filter Topic or Data based"
+                }
               },
-              "policy_type": {
-                "type": "string",
-                "nullable": true,
-                "description": "Filter Topic or Data based"
+              "example": {
+                "email": "admin@mail.com",
+                "policy_type": "topic_based"
               }
-            },
-            "example": {
-              "email": "admin@mail.com",
-              "policy_type": "topic_based"
             }
           }
-        }],
+        ],
         "produces": [
           "application/json"
         ],
@@ -347,40 +382,45 @@
         "consumes": [
           "application/json"
         ],
-        "security": [{
-          "csrftoken": []
-        }],
-        "parameters": [{
-          "in": "cookie",
-          "name": "csrftoken",
-          "schema": {
-            "type": "string"
+        "security": [
+          {
+            "csrftoken": []
           }
-        }, {
-          "in": "body",
-          "description": "Data catalogue element",
-          "schema": {
-            "type": "object",
-            "required": [
-              "email",
-              "data_id"
-            ],
-            "properties": {
-              "email": {
-                "type": "string",
-                "description": "Administrator email"
+        ],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "csrftoken",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "description": "Data catalogue element",
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "data_id"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "Administrator email"
+                },
+                "data_id": {
+                  "type": "integer",
+                  "description": "id of Data catalogue element"
+                }
               },
-              "data_id": {
-                "type": "integer",
-                "description": "id of Data catalogue element"
+              "example": {
+                "email": "admin@mail.com",
+                "data_id": 1
               }
-            },
-            "example": {
-              "email": "admin@mail.com",
-              "data_id": 1
             }
           }
-        }],
+        ],
         "produces": [
           "application/json"
         ],
@@ -420,29 +460,31 @@
         "consumes": [
           "application/json"
         ],
-        "parameters": [{
-          "in": "body",
-          "description": "User credentials",
-          "schema": {
-            "type": "object",
-            "required": [
-              "username",
-              "password"
-            ],
-            "properties": {
-              "username": {
-                "type": "string"
+        "parameters": [
+          {
+            "in": "body",
+            "description": "User credentials",
+            "schema": {
+              "type": "object",
+              "required": [
+                "username",
+                "password"
+              ],
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
               },
-              "password": {
-                "type": "string"
+              "example": {
+                "username": "jhon.doe@mail.com",
+                "password": "Jp@ssword"
               }
-            },
-            "example": {
-              "username": "jhon.doe@mail.com",
-              "password": "Jp@ssword"
             }
           }
-        }],
+        ],
         "produces": [
           "application/json"
         ],
@@ -471,13 +513,16 @@
         "tags": [
           "Publisher policies"
         ],
-        "security": [{
-          "token": []
-        }],
+        "security": [
+          {
+            "token": []
+          }
+        ],
         "consumes": [
           "application/json"
         ],
-        "parameters": [{
+        "parameters": [
+          {
             "name": "Authorization",
             "in": "header",
             "required": true,
@@ -538,60 +583,112 @@
         "consumes": [
           "application/json"
         ],
-        "security": [{
-          "csrftoken": []
-        }],
-        "parameters": [{
-          "in": "cookie",
-          "name": "csrftoken",
-          "schema": {
-            "type": "string"
+        "security": [
+          {
+            "csrftoken": []
           }
-        }, {
-          "in": "body",
-          "description": "Policy details",
-          "schema": {
-            "type": "object",
-            "required": [
-              "policy_id",
-              "policy_type",
-              "catalogue_id",
-              "transformations",
-              "user_email"
-            ],
-            "properties": {
-              "policy_id": {
-                "type": "integer",
-                "nullable": true
+        ],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "csrftoken",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "description": "Policy details",
+            "schema": {
+              "type": "object",
+              "required": [
+                "policy_id",
+                "policy_type",
+                "catalogue_id",
+                "transformations",
+                "user_email"
+              ],
+              "properties": {
+                "policy_id": {
+                  "type": "integer",
+                  "nullable": true,
+                  "description": "Publisher policy id"
+                },
+                "policy_type": {
+                  "type": "string",
+                  "description": "Publisher policy type"
+                },
+                "catalogue_id": {
+                  "type": "integer",
+                  "description": "Data catalogue element id"
+                },
+                "transformations": {
+                  "type": "array",
+                  "description": "List of transformations applied to the Publisher policy",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "item_type"
+                    ],
+                    "properties": {
+                      "item_type": {
+                        "type": "string",
+                        "description": "Type of transformation",
+                        "enum": [
+                          "organization_name",
+                          "organization_type",
+                          "data_based"
+                        ]
+                      },
+                      "organization_name": {
+                        "type": "string",
+                        "description": "Name of organization"
+                      },
+                      "organization_type": {
+                        "type": "string",
+                        "description": "Type of organization"
+                      },
+                      "json_path": {
+                        "type": "string",
+                        "description": "JSON path expression"
+                      },
+                      "item_operator": {
+                        "type": "string",
+                        "description": "Operator for transformation",
+                        "enum": [
+                          "organization_name_endpoint_restriction",
+                          "organization_type_endpoint_restriction",
+                          "payload_extraction",
+                          "subscriber_orgname_filtering",
+                          "subscriber_orgtype_filtering"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "user_email": {
+                  "type": "string",
+                  "description": "Publisher email"
+                }
               },
-              "policy_type": {
-                "type": "string"
-              },
-              "catalogue_id": {
-                "type": "integer"
-              },
-              "transformations": {
-                "type": "array"
-              },
-              "user_email": {
-                "type": "string"
+              "example": {
+                "policy_id": 1,
+                "policy_type": "data_structure_based",
+                "catalogue_id": 3,
+                "transformations": [
+                  {
+                    "organization_name": "easyJet",
+                    "organization_type": "airline",
+                    "json_path": "$.",
+                    "item_type": "data_based",
+                    "item_operator": "payload_extraction"
+                  }
+                ],
+                "user_email": "jhon.doe@mail.com"
               }
-            },
-            "example": {
-              "policy_id": 1,
-              "policy_type": "data_structure_based",
-              "catalogue_id": 3,
-              "transformations": [{
-                "organization_name": "easyJet",
-                "organization_type": "airline",
-                "json_path": "$.",
-                "item_type": "data_based",
-                "item_operator": "payload_extraction"
-              }],
-              "user_email": "jhon.doe@mail.com"
             }
           }
-        }],
+        ],
         "produces": [
           "application/json"
         ],
@@ -631,16 +728,20 @@
         "consumes": [
           "application/json"
         ],
-        "security": [{
-          "csrftoken": []
-        }],
-        "parameters": [{
-          "in": "cookie",
-          "name": "csrftoken",
-          "schema": {
-            "type": "string"
+        "security": [
+          {
+            "csrftoken": []
           }
-        }],
+        ],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "csrftoken",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -682,41 +783,46 @@
         "consumes": [
           "application/json"
         ],
-        "security": [{
-          "csrftoken": []
-        }],
-        "parameters": [{
-          "in": "cookie",
-          "name": "csrftoken",
-          "schema": {
-            "type": "string"
+        "security": [
+          {
+            "csrftoken": []
           }
-        }, {
-          "in": "body",
-          "name": "body",
-          "description": "User credentials",
-          "schema": {
-            "type": "object",
-            "required": [
-              "user",
-              "email"
-            ],
-            "properties": {
-              "user": {
-                "type": "string",
-                "description": "User administrator"
+        ],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "csrftoken",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User credentials",
+            "schema": {
+              "type": "object",
+              "required": [
+                "user",
+                "email"
+              ],
+              "properties": {
+                "user": {
+                  "type": "string",
+                  "description": "User administrator"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "Email to delete"
+                }
               },
-              "email": {
-                "type": "string",
-                "description": "Email to delete"
+              "example": {
+                "user": "admin@mail.com",
+                "email": "jhon.doe@mail.com"
               }
-            },
-            "example": {
-              "user": "admin@mail.com",
-              "email": "jhon.doe@mail.com"
             }
           }
-        }],
+        ],
         "produces": [
           "application/json"
         ],
@@ -748,7 +854,9 @@
       }
     }
   },
-  "servers": [{
-    "url": "https://adc-frontend/"
-  }]
+  "servers": [
+    {
+      "url": "https://adc-frontend/"
+    }
+  ]
 }
