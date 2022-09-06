@@ -5,17 +5,9 @@
     <h1>Aviation Data Corridor</h1>
   </span>
   <span class="spacer"></span>
-  <span class="username" *ngIf="user"><b>{{user.name}}</b><br>{{user.profile | titlecase}}</span>
-  <button mat-icon-button *ngIf="user">
-    <mat-icon>person</mat-icon>
-  </button>
-  <button mat-icon-button *ngIf="user">
-    <mat-icon>notifications</mat-icon>
-  </button>
-  <!-- <button mat-icon-button *ngIf="user">
-    <mat-icon>more_vert</mat-icon>
-  </button> -->
-  <button mat-icon-button *ngIf="user">
+  <span class="username" *ngIf="user"><b>{{user.email}}</b><br><b>Organization:</b> {{user.name}} -
+    {{user.type}}<br><b>Role:</b> {{user.user_role}}</span>
+  <button mat-icon-button *ngIf="user" (click)="logout()" matTooltip="Logout" matTooltipPosition="right">
     <mat-icon>logout</mat-icon>
   </button>
 </div>

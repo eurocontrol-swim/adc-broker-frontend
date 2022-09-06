@@ -11,20 +11,20 @@
       </mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Path" formControlName="path" required>
+      <input matInput placeholder="Name" formControlName="path" required>
       <mat-error>
-        Path required
+        Name required
       </mat-error>
     </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Schema" formControlName="schema" required>
+    <!-- <mat-form-field>
+      <input matInput placeholder="Schema" formControlName="schema">
       <mat-error>
         Schema required
       </mat-error>
-    </mat-form-field>
+    </mat-form-field> -->
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-raised-button color='primary' [mat-dialog-close]="true">{{dialog_data.action | titlecase}} data element</button>
+  <button mat-raised-button color='primary' [disabled]="createDataform.invalid" (click)="submitData()">{{dialog_data.action | titlecase}} data element</button>
 </mat-dialog-actions>

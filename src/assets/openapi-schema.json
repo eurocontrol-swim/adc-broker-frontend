@@ -1,0 +1,862 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is the API documentation for Aviation Data Corridor Broker.",
+    "title": "EuroControl ADC - API documentation",
+    "version": "1.0"
+  },
+  "securityDefinitions": {
+    "token": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    },
+    "csrftoken": {
+      "type": "apiKey",
+      "name": "csrftoken",
+      "in": "cookie"
+    }
+  },
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Everything about users"
+    },
+    {
+      "name": "Data Catalogue",
+      "description": "Everything about Data Catalogue"
+    },
+    {
+      "name": "Publisher policies",
+      "description": "Everything about Publisher policies"
+    }
+  ],
+  "paths": {
+    "/auth": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Login the user",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User credentials",
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "password"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "email": "admin@mail.com",
+                "password": "admin"
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok. Login user and return a user object"
+          },
+          "400": {
+            "description": "Bad request. Login error"
+          },
+          "405": {
+            "description": "Request method is not POST"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/postUser": {
+      "post": {
+        "summary": "User - Create or update",
+        "tags": [
+          "Users"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "csrftoken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "csrftoken",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "description": "User informations",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "firstname",
+                "lastname",
+                "email",
+                "password",
+                "role",
+                "organization_name",
+                "organization_type"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "firstname": {
+                  "type": "string"
+                },
+                "lastname": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "administrator",
+                    "publisher",
+                    "subscriber"
+                  ]
+                },
+                "organization_name": {
+                  "type": "string"
+                },
+                "organization_type": {
+                  "type": "string",
+                  "enum": [
+                    "airline",
+                    "airport_operator",
+                    "air_navigation_service_provider",
+                    "network_manager",
+                    "ground_handler",
+                    "meteorological_service_provider"
+                  ]
+                }
+              },
+              "example": {
+                "id": 1,
+                "firstname": "Jhon",
+                "lastname": "Doe",
+                "email": "jhon.doe@mail.com",
+                "password": "Jp@ssword",
+                "role": "subscriber",
+                "organization_name": "easyJet",
+                "organization_type": "airline"
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok. User created",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "crsftoken=o8CT3YF; Path=/; HttpOnly"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. User does not exist or already exist"
+          },
+          "405": {
+            "description": "Request method is not POST or another user already has this username"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/postDataCatalogue": {
+      "post": {
+        "summary": "Data catalogue element - Create or update",
+        "tags": [
+          "Data Catalogue"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "csrftoken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "csrftoken",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "description": "Data catalogue element",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "type",
+                "path",
+                "email"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "topic_element",
+                    "data_element"
+                  ]
+                },
+                "path": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "id": 1,
+                "type": "topic_element",
+                "path": "all.topics",
+                "email": "jhon.doe@mail.com"
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok. Data catalogue element created",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "crsftoken=o8CT3YF; Path=/; HttpOnly"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The user does not exist"
+          },
+          "401": {
+            "description": "Unauthorized. The user does not have the ADMINISTRATOR role"
+          },
+          "405": {
+            "description": "Request method is not POST"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/getDataCatalogue": {
+      "get": {
+        "summary": "Data catalogue list",
+        "tags": [
+          "Data Catalogue"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "csrftoken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "csrftoken",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "description": "Data catalogue element",
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "policy_type"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "Administrator email"
+                },
+                "policy_type": {
+                  "type": "string",
+                  "nullable": true,
+                  "description": "Filter Topic or Data based"
+                }
+              },
+              "example": {
+                "email": "admin@mail.com",
+                "policy_type": "topic_based"
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok. Data catalogue element created",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "crsftoken=o8CT3YF; Path=/; HttpOnly"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The user does not exist"
+          },
+          "405": {
+            "description": "Request method is not GET"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/deleteDataElement": {
+      "delete": {
+        "summary": "Delete Data catalogue element",
+        "tags": [
+          "Data Catalogue"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "csrftoken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "csrftoken",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "description": "Data catalogue element",
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "data_id"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "Administrator email"
+                },
+                "data_id": {
+                  "type": "integer",
+                  "description": "id of Data catalogue element"
+                }
+              },
+              "example": {
+                "email": "admin@mail.com",
+                "data_id": 1
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok. The data element is deleted",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "crsftoken=o8CT3YF; Path=/; HttpOnly"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The user or data element does not exist"
+          },
+          "401": {
+            "description": "Unauthorized. The user does not have the ADMINISTRATOR role"
+          },
+          "405": {
+            "description": "Request method is not DELETE"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/token/": {
+      "post": {
+        "summary": "User token",
+        "tags": [
+          "Users"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "description": "User credentials",
+            "schema": {
+              "type": "object",
+              "required": [
+                "username",
+                "password"
+              ],
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "username": "jhon.doe@mail.com",
+                "password": "Jp@ssword"
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok. token value"
+          },
+          "400": {
+            "description": "Bad request. Wrong credentials"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "405": {
+            "description": "Request method is not POST"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/publish/": {
+      "post": {
+        "summary": "Publish message",
+        "tags": [
+          "Publisher policies"
+        ],
+        "security": [
+          {
+            "token": []
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "description": "Publish informations",
+            "schema": {
+              "type": "object",
+              "required": [
+                "policy_id",
+                "message"
+              ],
+              "properties": {
+                "policy_id": {
+                  "type": "integer"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "policy_id": 1,
+                "message": "Sample message"
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok. Message published"
+          },
+          "400": {
+            "description": "Bad request. The publisher policy does not exist"
+          },
+          "401": {
+            "description": "Unauthorized. The user is not allowed to publish here"
+          },
+          "405": {
+            "description": "Request method is not POST"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/postPublisherPolicy": {
+      "post": {
+        "summary": "Publisher Policy - Create or update",
+        "tags": [
+          "Publisher policies"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "csrftoken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "csrftoken",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "description": "Policy details",
+            "schema": {
+              "type": "object",
+              "required": [
+                "policy_id",
+                "policy_type",
+                "catalogue_id",
+                "transformations",
+                "user_email"
+              ],
+              "properties": {
+                "policy_id": {
+                  "type": "integer",
+                  "nullable": true,
+                  "description": "Publisher policy id"
+                },
+                "policy_type": {
+                  "type": "string",
+                  "description": "Publisher policy type"
+                },
+                "catalogue_id": {
+                  "type": "integer",
+                  "description": "Data catalogue element id"
+                },
+                "transformations": {
+                  "type": "array",
+                  "description": "List of transformations applied to the Publisher policy",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "item_type"
+                    ],
+                    "properties": {
+                      "item_type": {
+                        "type": "string",
+                        "description": "Type of transformation",
+                        "enum": [
+                          "organization_name",
+                          "organization_type",
+                          "data_based"
+                        ]
+                      },
+                      "organization_name": {
+                        "type": "string",
+                        "description": "Name of organization"
+                      },
+                      "organization_type": {
+                        "type": "string",
+                        "description": "Type of organization"
+                      },
+                      "json_path": {
+                        "type": "string",
+                        "description": "JSON path expression"
+                      },
+                      "item_operator": {
+                        "type": "string",
+                        "description": "Operator for transformation",
+                        "enum": [
+                          "organization_name_endpoint_restriction",
+                          "organization_type_endpoint_restriction",
+                          "payload_extraction",
+                          "subscriber_orgname_filtering",
+                          "subscriber_orgtype_filtering"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "user_email": {
+                  "type": "string",
+                  "description": "Publisher email"
+                }
+              },
+              "example": {
+                "policy_id": 1,
+                "policy_type": "data_structure_based",
+                "catalogue_id": 3,
+                "transformations": [
+                  {
+                    "organization_name": "easyJet",
+                    "organization_type": "airline",
+                    "json_path": "$.",
+                    "item_type": "data_based",
+                    "item_operator": "payload_extraction"
+                  }
+                ],
+                "user_email": "jhon.doe@mail.com"
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok. Publisher policy created or updated",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "crsftoken=o8CT3YF; Path=/; HttpOnly"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. User does not exist"
+          },
+          "401": {
+            "description": "Unauthorized. The user is not authorized"
+          },
+          "405": {
+            "description": "Request method is not POST or another user already has this username"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/getUsers/": {
+      "get": {
+        "summary": "List of users",
+        "tags": [
+          "Users"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "csrftoken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "csrftoken",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "crsftoken=o8CT3YF; Path=/; HttpOnly"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "json",
+                  "example": "{'users': [{'id': 1, 'first_name': 'Jhon', 'last_name': 'Doe', 'email': 'john.doe@mail.com', 'user_role': 'administrator', 'organization_name': 'Eurocontrol', 'organization_type': 'network_manager'}]}"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Request method is not GET"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/deleteUser": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete the user",
+        "consumes": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "csrftoken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "csrftoken",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User credentials",
+            "schema": {
+              "type": "object",
+              "required": [
+                "user",
+                "email"
+              ],
+              "properties": {
+                "user": {
+                  "type": "string",
+                  "description": "User administrator"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "Email to delete"
+                }
+              },
+              "example": {
+                "user": "admin@mail.com",
+                "email": "jhon.doe@mail.com"
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok. The user is deleted",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "crsftoken=o8CT3YF; Path=/; HttpOnly"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. User does not exist"
+          },
+          "401": {
+            "description": "Unauthorized. The user does not have the ADMINISTRATOR role"
+          },
+          "405": {
+            "description": "Request method is not DELETE"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://adc-frontend/"
+    }
+  ]
+}

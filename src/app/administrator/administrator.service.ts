@@ -1,23 +1,20 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
-import { Transformation } from '../app.component'
+import { HttpClient, HttpEvent, HttpResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PublisherService {
+export class AdministratorService {
 
   constructor(
     private http: HttpClient,
   ) { }
 
-  getPublisherPolicy(
-    user_mail: string
-  ): Observable<any> {
+  getUsers(): Observable<any> {
     const headers = { 'content-type': 'application/json' }
     return this.http.get<any>(
-      'api/getPublisherPolicy?user_mail=' + user_mail,
+      'api/getUsers',
       {
         headers: headers,
         responseType: 'json',
@@ -32,61 +29,13 @@ export class PublisherService {
       )
   }
 
-  getOrganizationsType(
-  ): Observable<any> {
-    const headers = { 'content-type': 'application/json' }
-    return this.http.get<any>(
-      'api/getOrganizationsType',
-      {
-        headers: headers,
-        responseType: 'json',
-      }
-    )
-      .pipe(
-        catchError((err) => {
-          console.error(err);
-          throw err;
-        }
-        )
-      )
-  }
-
-  getOrganizationsName(
-  ): Observable<any> {
-    const headers = { 'content-type': 'application/json' }
-    return this.http.get<any>(
-      'api/getOrganizationsName',
-      {
-        headers: headers,
-        responseType: 'json',
-      }
-    )
-      .pipe(
-        catchError((err) => {
-          console.error(err);
-          throw err;
-        }
-        )
-      )
-  }
-
-  postPublisherPolicy(
-    policy_id: string,
-    policy_type: string,
-    catalogue_id: number,
-    transformations: Transformation[],
-    user_email: string
+  addUser(
+    userValues: Array<string>
   ): Observable<any> {
     const headers = { 'content-type': 'application/json' }
     return this.http.post<any>(
-      'api/postPublisherPolicy',
-      {
-        'policy_id': policy_id,
-        'policy_type': policy_type,
-        'catalogue_id': catalogue_id,
-        'transformations': transformations,
-        'user_email': user_email
-      },
+      'api/postUser',
+      userValues,
       {
         headers: headers,
         responseType: 'json',
@@ -102,16 +51,16 @@ export class PublisherService {
       )
   }
 
-  deletePublisherPolicy(
-    policy_id: number,
-    user_email: string
+  deleteUser(
+    user: string,
+    email: string
   ): Observable<any> {
     const headers = { 'content-type': 'application/json' }
     return this.http.delete<any>(
-      'api/deletePublisherPolicy',
+      'api/deleteUser',
       {
         headers: headers,
-        body: { 'user_email': user_email, 'policy_id': policy_id },
+        body: { 'user': user, 'email': email },
       }
     )
       .pipe(
@@ -123,5 +72,74 @@ export class PublisherService {
       )
   }
 
+  addDataCatalogue(
+    dataValues: any,
+    email: string
+  ): Observable<any> {
+    const headers = { 'content-type': 'application/json' }
+    dataValues["user_email"] = email;
 
+    return this.http.post<any>(
+      'api/postDataCatalogue',
+      dataValues,
+      {
+        headers: headers,
+        responseType: 'json',
+        observe: 'response',
+      }
+    )
+      .pipe(
+        catchError((err) => {
+          console.error(err);
+          throw err;
+        }
+        )
+      )
+  }
+
+  getDataCatalogue(
+    policy_type: string,
+    email: string
+  ): Observable<any> {
+    const headers = { 'content-type': 'application/json' }
+    let URL = '?email=' + email
+    if (policy_type != null) {
+      URL = '?policy_type=' + policy_type + '&email=' + email
+    }
+    return this.http.get<any>(
+      'api/getDataCatalogue' + URL,
+      {
+        headers: headers,
+        responseType: 'json',
+      }
+    )
+      .pipe(
+        catchError((err) => {
+          console.error(err);
+          throw err;
+        }
+        )
+      )
+  }
+
+  deleteDataElement(
+    data_id: number,
+    email: string
+  ): Observable<any> {
+    const headers = { 'content-type': 'application/json' }
+    return this.http.delete<any>(
+      'api/deleteDataElement',
+      {
+        headers: headers,
+        body: { 'data_id': data_id, 'user_email': email },
+      }
+    )
+      .pipe(
+        catchError((err) => {
+          console.error(err);
+          throw err;
+        }
+        )
+      )
+  }
 }

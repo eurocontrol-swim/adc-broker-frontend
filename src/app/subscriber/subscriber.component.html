@@ -7,28 +7,231 @@
           <mat-card-title>Latest subscription policies</mat-card-title>
         </mat-card-header>
         <mat-card-content class="table_card">
-          
+          <table mat-table [dataSource]="dataSource" matSort matSortActive="created_at" matSortDirection="desc"
+            multiTemplateDataRows>
+
+            <!-- Policy ID Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Policy ID </th>
+              <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            </ng-container>
+
+            <!-- Policy date Column -->
+            <ng-container matColumnDef="created_at">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.created_at | date:'medium'}} </td>
+            </ng-container>
+
+            <!-- Policy type Column -->
+            <ng-container matColumnDef="policy_type">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Policy type </th>
+              <td mat-cell *matCellDef="let element"> {{element.policy_type | adcLabel}} </td>
+            </ng-container>
+
+            <!-- Delivery end point Column -->
+            <ng-container matColumnDef="delivery_end_point">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Delivery end point </th>
+              <td mat-cell *matCellDef="let element"> {{element.delivery_end_point}} </td>
+            </ng-container>
+
+            <!-- Edit Policy Column -->
+            <ng-container matColumnDef="edit_policy">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element"> <button mat-icon-button matTooltip="Edit policy"
+                  matTooltipPosition="right" color="primary" (click)="$event.stopPropagation(); editPolicy(element);">
+                  <mat-icon>edit</mat-icon>
+                </button> </td>
+            </ng-container>
+
+            <!-- Delete Policy Column -->
+            <ng-container matColumnDef="delete_policy">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element"> <button mat-icon-button matTooltip="Delete policy"
+                  matTooltipPosition="right" color="primary"
+                  (click)="$event.stopPropagation(); deletePolicy(element.id);">
+                  <mat-icon>delete</mat-icon>
+                </button> </td>
+            </ng-container>
+
+            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+            <ng-container matColumnDef="expandedDetail">
+              <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                <div class="expand-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                  <div class="transformations" *ngFor="let catalogue of element.catalogue">
+                    <p><b>Catalogue element</b></p>
+                    <p>id: {{catalogue.id}}</p>
+                    <p>Data name: {{catalogue.data_path}}</p>
+                    <!-- <p>
+                      {{catalogue.data_schema ? 'Data schema: '+catalogue.data_schema : null}}
+                    </p> -->
+                    <p>
+                      {{catalogue.data_type ? 'Data type: '+(catalogue.data_type | adcLabel) : null}}
+                    </p>
+                  </div>
+                  <div class="transformations" *ngFor="let transformation of element.transformations">
+                    <p><b>Transformation #{{transformation.item_order}}</b></p>
+                    <p>Item type: {{transformation.item_type | adcLabel}}</p>
+                    <p>
+                      {{transformation.item_type == 'organization_name' ? 'Organization name: '+(transformation.organization_name) : null}}
+                    </p>
+                    <p>
+                      {{transformation.item_type == 'organization_type' ? 'Organization type: '+(transformation.organization_type) : null}}
+                    </p>
+                    <p>
+                      {{transformation.item_type == 'data_based' ? 'Json path: ' + transformation.json_path : null }}
+                    </p>
+                    <p>
+                      {{transformation.item_type == 'data_based' ? 'Operator: ' + (transformation.item_operator | adcLabel) : null }}
+                    </p>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+            <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="expand-row"
+              [class.expanded-row]="expandedElement === element"
+              (click)="expandedElement = expandedElement === element ? null : element"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+          </table>
         </mat-card-content>
       </mat-card>
     </div>
   </div>
-  <div>
-    <button mat-raised-button color="primary">
-      <mat-icon>add</mat-icon> Create new subscription policy
+  <div *ngIf="!newPublication" style="text-align: right;">
+    <button mat-raised-button color="primary" (click)="newPublication = !newPublication">
+      <mat-icon>add</mat-icon> Create new delivery policy
     </button>
   </div>
-  <div class="row" style="margin-top: 20px;">
+
+  <div class="row" style="margin-top: 20px;" *ngIf="newPublication">
     <div class="col-12">
       <mat-card>
         <mat-card-header>
-          <mat-card-title>New subscription policy</mat-card-title>
+          <mat-card-title>{{create_or_update ? 'New':'Update'}} subscrition policy</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          
+          <form [formGroup]="subscribePolicyForm">
+            <mat-form-field>
+              <mat-label>Policy type</mat-label>
+              <mat-select formControlName="policy_type" required (selectionChange)="getAllData($event.value)">
+                <mat-option *ngFor="let type of policyTypes" [value]="type.value">{{type.viewValue}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Catalogue Id</mat-label>
+              <mat-select id="catalogue_id" formControlName="catalogue_id" required [disabled]="catalogues.length <= 0">
+                <mat-option *ngFor="let catalogue of catalogues" [value]="catalogue.id">
+                  <li><b>id:</b> {{catalogue.id}}</li>
+                  <li><b>Data name:</b> {{catalogue.data_path}}</li>
+                  <!-- <li><b>Data schema:</b> {{catalogue.data_schema}}</li> -->
+                  <li><b>Data type:</b> {{catalogue.data_type | adcLabel}}</li>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <h5>Transformations list</h5>
+            <div formGroupName="transformations" class="transformations-panel">
+              <div class="row">
+                <div class="col-6">
+                  <mat-form-field>
+                    <mat-label>Item type</mat-label>
+                    <mat-select formControlName="item_type" (selectionChange)="getOrganizations($event.value)">
+                      <mat-option *ngFor="let type of types" [value]="type.value">
+                        {{type.viewValue}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-6">
+                  <mat-form-field *ngIf="organizationsName.length > 0">
+                    <mat-label>Organizations name</mat-label>
+                    <mat-select formControlName="organization_name">
+                      <mat-option *ngFor="let name of organizationsName" [value]="name">
+                        {{name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="organizationsType.length > 0">
+                    <mat-label>Organizations type</mat-label>
+                    <mat-select formControlName="organization_type">
+                      <mat-option *ngFor="let type of organizationsType" [value]="type">
+                        {{type}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row"
+                *ngIf="subscribePolicyForm.get('transformations').get('item_type').value == 'data_based'">
+                <div class="col-8">
+                  <mat-form-field>
+                    <input matInput placeholder="Json path" formControlName="json_path">
+                  </mat-form-field>
+                </div>
+                <div class="col-4">
+                  <mat-form-field>
+                    <mat-label>Operators</mat-label>
+                    <mat-select formControlName="item_operator">
+                      <mat-option *ngFor="let operator of operators" [value]="operator.value">
+                        {{operator.viewValue}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div style="text-align: center; margin-bottom: 10px;">
+                <button mat-stroked-button style="margin-right: 20px;"
+                  (click)="subscribePolicyForm.get('transformations').reset(); resetTransformations();">
+                  Reset transformation item
+                </button>
+                <button mat-raised-button
+                  [disabled]="subscribePolicyForm.get('transformations').get('item_type').value == null || subscribePolicyForm.get('transformations').invalid"
+                  color="primary" (click)="addTransformItem()">
+                  <mat-icon>add</mat-icon> Add transformation item
+                </button>
+              </div>
+
+              <div class="row tr">
+                <div class="col-12">
+                  <table class="table transformations-table">
+                    <thead>
+                      <tr>
+                        <th scope="col"># Order</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Operator</th>
+                        <th scope="col">Json path</th>
+                      </tr>
+                    </thead>
+                    <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+                      <tr *ngFor="let transformation of transformationList; let i = index;" cdkDrag cdkDragLockAxis="y">
+                        <th>
+                          <div class="drag-handle">
+                            <mat-icon>drag_indicator</mat-icon>{{i}}
+                          </div>
+                        </th>
+                        <td>{{ transformation.item_type | adcLabel }}
+                          {{ transformation.item_type == 'organization_type' ? ': '+(transformation.organization_type) : null }}
+                          {{ transformation.item_type == 'organization_name' ? ': '+(transformation.organization_name) : null }}
+                        </td>
+                        <td>{{ transformation.item_operator | adcLabel }}</td>
+                        <td>{{ transformation.json_path }}</td>
+                        <td><button mat-icon-button (click)="deleteTransformationElement(i)"
+                            matTooltip="Delete transformation" matTooltipPosition="right">
+                            <mat-icon>delete</mat-icon>
+                          </button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </form>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-raised-button color="primary" >Subcribe</button>
-          <button mat-button >Cancel</button>
+          <button mat-button
+            (click)="newPublication = !newPublication; create_or_update = true; resetTransformations(); transformationList = []; subscribePolicyForm.reset()">Cancel</button>
+          <button mat-raised-button color="primary" [disabled]="subscribePolicyForm.invalid"
+            (click)="onPublish(); create_or_update = true">{{create_or_update ? 'Publish':'Update'}} policy</button>
         </mat-card-actions>
       </mat-card>
     </div>

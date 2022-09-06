@@ -7,10 +7,11 @@ import { AdministratorComponent } from './administrator/administrator.component'
 
 const routes: Routes = [
   { path: '',   redirectTo: '/login', pathMatch: 'full' }, // redirect to 
-  { path: 'admin', component: AdministratorComponent },
+  { path: 'administrator', component: AdministratorComponent },
   { path: 'publisher', component: PublisherComponent },
   { path: 'subscriber', component: SubscriberComponent },
   { path: 'login', component: LoginComponent },
+  { path: '**', redirectTo: '/login' }
 ];
 
 @NgModule({
